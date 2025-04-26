@@ -26,26 +26,13 @@ public class SwaggerConfig {
                 .contact(new Contact()
                         .name("Alisher")
                         .email("alisherdaminov135@gmail.com")
-                        .url("https://github.com/alisherdaminov")
+                        .url("https://github.com/Alisher19121994/hotels.uz")
                 )
                 .license(new License()
-                        .name("Videohub.uz")
-                        .url("https://videohub.uz/")
-                )
-                .termsOfService("Savol javob guruhi: https://t.me/code_uz_group");
+                        .name("hotel.uz")
 
-        // servers (ishlatiladigan serverlar)
-        Server server1 = new Server()
-                .description("Local")
-                .url("http://localhost:8080");
+                );
 
-        Server server2 = new Server()
-                .description("DEV")
-                .url("http://api.mazgi.uz");
-
-        Server server3 = new Server()
-                .description("PROD")
-                .url("http://api.giybat.uz");
 
         // security type (bizning holatda JWT)
         SecurityRequirement securityRequirement = new SecurityRequirement();
@@ -64,7 +51,6 @@ public class SwaggerConfig {
         // collect all together
         OpenAPI openAPI = new OpenAPI();
         openAPI.setInfo(info);
-        openAPI.setServers(List.of(server1, server2, server3));
         openAPI.setSecurity(List.of(securityRequirement));
         openAPI.components(components);
 

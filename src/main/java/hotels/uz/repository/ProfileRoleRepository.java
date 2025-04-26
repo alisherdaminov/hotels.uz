@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,6 +25,6 @@ public interface ProfileRoleRepository extends JpaRepository<ProfileRoleEntity, 
     @Modifying
     void deleteByProfileHotelId(Integer profileHotelId);
 
-    @Query("select p.roles From ProfileRoleEntity p where p.profileUserId = ?1")
+    @Query("select p.profileRoles From ProfileRoleEntity p where p.profileUserId = ?1")
     ProfileRole findRoleByProfileUserId(Integer profileUserId);
 }

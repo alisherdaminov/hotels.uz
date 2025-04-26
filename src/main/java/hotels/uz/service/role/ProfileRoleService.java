@@ -15,12 +15,29 @@ public class ProfileRoleService {
     @Autowired
     private ProfileRoleRepository profileRoleRepository;
 
+//    public void createRole(Integer profileUserId, Integer profileHotelId, ProfileRole profileRole) {
+//        ProfileRoleEntity entity = new ProfileRoleEntity();
+//        entity.setProfileUserId(profileUserId);
+//        entity.setProfileHotelId(profileHotelId);
+//        entity.setProfileRoles(profileRole);
+//        entity.setCreatedData(LocalDateTime.now());
+//        profileRoleRepository.save(entity);
+//
+//    }
     public void createRole(Integer profileUserId, Integer profileHotelId, ProfileRole profileRole) {
         ProfileRoleEntity entity = new ProfileRoleEntity();
-        entity.setProfileUserId(profileUserId);
-        entity.setProfileHotelId(profileHotelId);
+
+        if (profileUserId != null) {
+            entity.setProfileUserId(profileUserId);
+        }
+
+        if (profileHotelId != null) {
+            entity.setProfileHotelId(profileHotelId);
+        }
+
         entity.setProfileRoles(profileRole);
-        entity.setCreatedData(LocalDateTime.now());
+        entity.setCreatedDate(LocalDateTime.now());
+
         profileRoleRepository.save(entity);
     }
 

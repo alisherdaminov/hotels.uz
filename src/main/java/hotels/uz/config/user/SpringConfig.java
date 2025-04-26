@@ -64,7 +64,8 @@ public class SpringConfig {
         return http.build();
     }
 
-    public BCryptPasswordEncoder passwordEncoder() {
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

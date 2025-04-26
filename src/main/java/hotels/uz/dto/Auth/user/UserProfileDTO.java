@@ -5,6 +5,8 @@ import hotels.uz.enums.ProfileRole;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,4 +18,5 @@ public class UserProfileDTO {
     private ProfileRole role;
     private String email;
     private String jwtToken;
+    private LocalDateTime createdDate;
 }

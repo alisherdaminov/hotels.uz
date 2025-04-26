@@ -11,10 +11,10 @@ import java.util.Locale;
 public class ResourceBundleService {
 
 
-    @Autowired
-    private ResourceBundleMessageSource bundleMessageSource;
-
-    public String getMessage(String code, AppLanguage appLanguage) {
-        return bundleMessageSource.getMessage(code, null, new Locale(appLanguage.name()));
-    }
+//    @Autowired
+//    private ResourceBundleMessageSource bundleMessageSource;
+//
+//    public String getMessage(String code, AppLanguage appLanguage) {
+//        return bundleMessageSource.getMessage(code, null, new Locale(appLanguage.name()));
+//    }
 }

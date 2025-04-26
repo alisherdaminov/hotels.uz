@@ -36,8 +36,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (userEntityOptional.isPresent()) {
             ProfileUserEntity user = userEntityOptional.get();
             ProfileRoleEntity role = profileRoleRepository.findByProfileUserId(user.getProfileUserId())
-                    .orElseThrow(() -> new UsernameNotFoundException(resourceBundleService.getMessage("user.not.found", AppLanguage.EN)));
-            return new CustomUserDetails(user.getEmail(), user.getPassword(), role.getProfileRoles(), user.getProfileUserId());
+                    // .orElseThrow(() -> new UsernameNotFoundException(resourceBundleService.getMessage("user.not.found", AppLanguage.EN)));
+                    .orElseThrow(() -> new UsernameNotFoundException("user.not.found"));
+            return new CustomUserDetails(user, role.getProfileRoles());
         }
 
         //finding hotel owner
@@ -45,10 +46,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (hotelEntityOptional.isPresent()) {
             ProfileHotelEntity hotel = hotelEntityOptional.get();
             ProfileRoleEntity role = profileRoleRepository.findByProfileHotelId(hotel.getProfileHotelId())
-                    .orElseThrow(() -> new UsernameNotFoundException(resourceBundleService.getMessage("hotel.not.found", AppLanguage.EN)));
-            return new CustomUserDetails(hotel.getEmail(), hotel.getPassword(), role.getProfileRoles(), hotel.getProfileHotelId());
+                    .orElseThrow(() -> new UsernameNotFoundException("user.not.found"));
+            return new CustomUserDetails(hotel, role.getProfileRoles());
         }
 
-        throw new UsernameNotFoundException(resourceBundleService.getMessage("user.not.found", AppLanguage.EN));
+        throw new UsernameNotFoundException("user.not.found");
     }
 }
