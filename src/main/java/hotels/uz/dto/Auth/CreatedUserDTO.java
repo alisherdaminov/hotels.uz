@@ -1,4 +1,4 @@
-package hotels.uz.dto.Auth.hotel;
+package hotels.uz.dto.Auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HotelRegistrationDTO {
+public class CreatedUserDTO {
     @NotBlank(message = "First name is required")
     private String firstName;
     @NotBlank(message = "Last name is required")
@@ -15,19 +15,16 @@ public class HotelRegistrationDTO {
     private String phoneNumber;
     @NotBlank(message = "Email is required")
     private String email;
+    @NotBlank(message = "user_name")
+    private String username;
     @NotBlank(message = "Password is required")
     private String password;
-    @NotBlank(message = "Property type is required")
+    // Hotel-specific fields
     private String propertyType;
-    @NotBlank(message = "Property address is required")
     private String propertyAddress;
-    @NotBlank(message = "Number of rooms is required")
-    private int numberOfRooms;
-    @NotBlank(message = "Has parking is required")
+    private String numberOfRooms;
     private Boolean hasParking;
-    @NotBlank(message = "Star rating is required")
-    private int starRating;
-    @NotBlank(message = "Property description is required")
+    private String starRating;
     private String propertyDescription;
 }
 

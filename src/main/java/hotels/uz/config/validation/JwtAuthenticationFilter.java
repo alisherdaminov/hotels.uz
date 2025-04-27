@@ -1,6 +1,6 @@
-package hotels.uz.config.user;
+package hotels.uz.config.validation;
 
-import hotels.uz.dto.Auth.login.JwtDTO;
+import hotels.uz.dto.Auth.JwtDTO;
 import hotels.uz.util.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = authHeader.substring(7).trim();
             JwtDTO jwtDTO = JwtUtil.decode(token);
-            String email = jwtDTO.getEmail();
+            String email = jwtDTO.getUsername();
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,

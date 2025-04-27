@@ -1,7 +1,5 @@
 package hotels.uz.entity;
 
-import hotels.uz.entity.hotel_profile.ProfileHotelEntity;
-import hotels.uz.entity.hotel_user.ProfileUserEntity;
 import hotels.uz.enums.ProfileRole;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,10 +8,10 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "profile_role")
+@Table(name = "role_table")
 @Getter
 @Setter
-public class ProfileRoleEntity {
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +20,9 @@ public class ProfileRoleEntity {
     @Column(name = "profile_user_id")
     private Integer profileUserId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_user_id", insertable = false, updatable = false)
-    private ProfileUserEntity profileUser;
-
-    @Column(name = "profile_hotel_id")
-    private Integer profileHotelId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_hotel_id", insertable = false, updatable = false)
-    private ProfileHotelEntity profileHotel;
+    private UserEntity profileUser;
 
     @Column(name = "roles")
     @Enumerated(EnumType.STRING)

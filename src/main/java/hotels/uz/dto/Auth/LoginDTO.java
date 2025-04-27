@@ -1,11 +1,11 @@
-package hotels.uz.dto.Auth.login;
+package hotels.uz.dto.Auth;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthDto {
-    private String email;
+public class LoginDTO {
+    private String username;
     private String password;
 }

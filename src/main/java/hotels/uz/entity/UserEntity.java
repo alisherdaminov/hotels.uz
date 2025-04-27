@@ -1,20 +1,21 @@
-package hotels.uz.entity.hotel_profile;
+package hotels.uz.entity;
 
-import hotels.uz.entity.ProfileRoleEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "profile_hotel")
+@Table(name = "user_table")
 @Getter
 @Setter
-public class ProfileHotelEntity {
+public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer profileHotelId;
+    private Integer profileUserId;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -23,25 +24,28 @@ public class ProfileHotelEntity {
     private String phoneNumber;
     @Column(name = "email")
     private String email;
+    @Column(name = "user_name")
+    private String username;
     @Column(name = "password")
     private String password;
+    // For HotelOwner specific fields
     @Column(name = "property_type")
     private String propertyType;
     @Column(name = "property_address")
     private String propertyAddress;
     @Column(name = "number_of_rooms")
-    private int numberOfRooms;
+    private String numberOfRooms;
     @Column(name = "has_parking")
     private Boolean hasParking;
     @Column(name = "star_rating")
-    private int starRating;
+    private String starRating;
     @Column(name = "property_description")
     private String propertyDescription;
-    @Column(name = "local_date")
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @OneToOne(mappedBy = "profileHotel", fetch = FetchType.LAZY)
-    private ProfileRoleEntity profileRole;
+    @OneToMany(mappedBy = "profileUser", fetch = FetchType.LAZY)
+    private List<RoleEntity> roleEntityList;
 
 
 }

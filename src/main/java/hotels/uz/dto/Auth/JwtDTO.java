@@ -1,4 +1,4 @@
-package hotels.uz.dto.Auth.login;
+package hotels.uz.dto.Auth;
 
 import hotels.uz.enums.ProfileRole;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class JwtDTO {
     private Integer userId;
-    private String email;
-    private ProfileRole role;
+    private String username;
+    private List<ProfileRole> roleList;
 }

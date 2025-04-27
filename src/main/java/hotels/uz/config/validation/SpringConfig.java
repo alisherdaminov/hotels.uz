@@ -1,4 +1,4 @@
-package hotels.uz.config.user;
+package hotels.uz.config.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
