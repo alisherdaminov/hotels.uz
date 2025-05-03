@@ -1,9 +1,9 @@
 package hotels.uz.config.validation;
 
-import hotels.uz.entity.UserEntity;
+import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.enums.ProfileRole;
-import hotels.uz.repository.RoleRepository;
-import hotels.uz.repository.AuthRepository;
+import hotels.uz.repository.auth.RoleRepository;
+import hotels.uz.repository.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,36 +17,21 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private AuthRepository profileUserRepository;
+    private UserRepository userRepository;
     @Autowired
-    private RoleRepository profileRoleRepository;
-//    @Autowired
-//    private ResourceBundleService resourceBundleService;
+    private RoleRepository roleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.printf("USERNAME: -> " + username);
-        Optional<UserEntity> optional = profileUserRepository.findByUsername(username);
+        System.out.printf("loadUserByUsername: " + username);
+        Optional<UserEntity> optional = userRepository.findByUsername(username);
         if (optional.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
-        UserEntity user = optional.get();
-        List<ProfileRole> rolesList = profileRoleRepository.findByRolesProfileUserId(user.getProfileUserId());
-        // .orElseThrow(() -> new UsernameNotFoundException(resourceBundleService.getMessage("user.not.found", AppLanguage.EN)));
-        return new CustomUserDetails(user, rolesList);
-
-
+        UserEntity profile = optional.get();
+        List<ProfileRole> roleEnumList = roleRepository.findByRolesProfileUserId(profile.getProfileUserId());
+        return new CustomUserDetails(profile, roleEnumList);
     }
 }
-//@Override
-//public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//    System.out.printf("loadUserByUsername: " + username);
-//    Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(username);
-//    if (optional.isEmpty()) {
-//        throw new UsernameNotFoundException("User not found");
-//    }
-//    ProfileEntity profile = optional.get();
-//    List<ProfileRoleEnum> roleEnumList = profileRoleRepository.findAllRolesByProfileId(profile.getId());
-//    return new CustomUserDetails(profile, roleEnumList);
-//}
-//}
+
+

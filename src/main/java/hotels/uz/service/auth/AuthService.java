@@ -1,14 +1,12 @@
 package hotels.uz.service.auth;
 
-import hotels.uz.dto.Auth.ApplicationData;
-import hotels.uz.dto.Auth.CreatedUserDTO;
-import hotels.uz.dto.Auth.LoginDTO;
-import hotels.uz.dto.Auth.ResponseDTO;
-import hotels.uz.entity.UserEntity;
+import hotels.uz.dto.Auth.*;
+import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.enums.AppLanguage;
 import hotels.uz.enums.ProfileRole;
-import hotels.uz.repository.RoleRepository;
-import hotels.uz.repository.AuthRepository;
+import hotels.uz.repository.auth.RoleRepository;
+import hotels.uz.repository.auth.UserRepository;
+import hotels.uz.repository.auth.RefreshTokenRepository;
 import hotels.uz.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,11 +21,15 @@ import java.util.Optional;
 public class AuthService {
 
     @Autowired
-    private AuthRepository authRepository;
+    private UserRepository authRepository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
+    private RefreshTokenRepository tokenRepository;
+    @Autowired
     private RoleService roleService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -73,22 +75,26 @@ public class AuthService {
         return new ApplicationData<>("Hotel successfully registered");
     }
 
-
     public ApplicationData<ResponseDTO> login(LoginDTO loginRequest, AppLanguage language) {
         Optional<UserEntity> optionalUser = authRepository.findByUsername(loginRequest.getUsername());
-        System.out.println("optionalUser = " + optionalUser);
+        System.out.println("optionalUser login fun ----> " + optionalUser);
         if (optionalUser.isEmpty()) {
             return new ApplicationData<>("user.not.found");
         }
-
         UserEntity user = optionalUser.get();
         if (!bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return new ApplicationData<>("wrong.password");
         }
-
         ResponseDTO userDTO = buildUserDTO(user);
         return new ApplicationData<>(userDTO, "success", new Date());
     }
+
+
+    public boolean logoutByUserId(Integer userId) {
+        int updatedRows = authRepository.updateLogoutTime(userId);
+        return updatedRows > 0;
+    }
+
 
     private ResponseDTO buildUserDTO(UserEntity user) {
         ResponseDTO dto = new ResponseDTO();
@@ -104,14 +110,12 @@ public class AuthService {
         dto.setStarRating(user.getStarRating());
         dto.setPropertyDescription(user.getPropertyDescription());
         dto.setCreatedDate(user.getCreatedDate());
-
         List<ProfileRole> roles = roleRepository.findByRolesProfileUserId(user.getProfileUserId());
         dto.setRoles(roles);
-
         if (!roles.isEmpty()) {
-            dto.setJwtToken(JwtUtil.encode(user.getEmail(), user.getProfileUserId(), roles));
+            dto.setJwtToken(JwtUtil.encode( user.getUsername(),user.getProfileUserId(), roles));
+            //dto.setRefreshToken(refreshTokenService.createRefreshToken(user).getRefreshToken());
         }
-
         return dto;
     }
 }

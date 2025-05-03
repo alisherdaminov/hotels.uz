@@ -20,6 +20,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SpringConfig {
 
+
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
@@ -35,34 +36,39 @@ public class SpringConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
-        return daoAuthenticationProvider;
+        final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(customUserDetailsService);
+        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        return authenticationProvider;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // authorization - what user can do
+        //does the user have the right roles for this request (for example, can the user access this APIs)
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
-                    .requestMatchers(AUTH_WHITELIST)
-                    .permitAll()
+                    // .requestMatchers(HttpMethod.GET, "/task").permitAll()
+                    .requestMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest()
                     .authenticated();
         }).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
+        // http.cors dan hohlagan domainlardan foydalanish mumkun degani
         http.cors(httpSecurityCorsConfigurer -> {
-            CorsConfiguration corsConfiguration = new CorsConfiguration();
-            corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-            corsConfiguration.setAllowedMethods(List.of("*"));
-            corsConfiguration.setAllowedHeaders(List.of("*"));
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOriginPatterns(List.of("*"));
+            configuration.setAllowedMethods(List.of("*"));
+            configuration.setAllowedHeaders(List.of("*"));
 
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", corsConfiguration);
+            source.registerCorsConfiguration("/**", configuration);
             httpSecurityCorsConfigurer.configurationSource(source);
         });
         return http.build();
     }
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

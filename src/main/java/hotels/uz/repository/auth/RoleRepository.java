@@ -1,6 +1,6 @@
-package hotels.uz.repository;
+package hotels.uz.repository.auth;
 
-import hotels.uz.entity.RoleEntity;
+import hotels.uz.entity.auth.RoleEntity;
 import hotels.uz.enums.ProfileRole;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

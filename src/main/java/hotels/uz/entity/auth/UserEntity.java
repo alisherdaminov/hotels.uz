@@ -1,5 +1,6 @@
-package hotels.uz.entity;
+package hotels.uz.entity.auth;
 
+import hotels.uz.entity.hotels.HotelsEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,36 +17,52 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer profileUserId;
+
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "phone_number")
     private String phoneNumber;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "user_name")
     private String username;
+
     @Column(name = "password")
     private String password;
-    // For HotelOwner specific fields
+
     @Column(name = "property_type")
     private String propertyType;
+
     @Column(name = "property_address")
     private String propertyAddress;
+
     @Column(name = "number_of_rooms")
     private String numberOfRooms;
+
     @Column(name = "has_parking")
     private Boolean hasParking;
+
     @Column(name = "star_rating")
     private String starRating;
+
     @Column(name = "property_description")
     private String propertyDescription;
+
     @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<HotelsEntity> hotels;
 
     @OneToMany(mappedBy = "profileUser", fetch = FetchType.LAZY)
     private List<RoleEntity> roleEntityList;
 
-
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private RefreshTokenEntity refreshToken;
 }

@@ -1,12 +1,12 @@
 package hotels.uz.util;
 
 import hotels.uz.config.validation.CustomUserDetails;
+import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.enums.ProfileRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SpringSecurityUtil {
-
     public static CustomUserDetails getCurrentUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (CustomUserDetails) authentication.getPrincipal();

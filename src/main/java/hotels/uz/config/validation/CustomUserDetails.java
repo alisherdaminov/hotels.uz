@@ -1,7 +1,8 @@
 package hotels.uz.config.validation;
 
-import hotels.uz.entity.UserEntity;
+import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.enums.ProfileRole;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String userName;
+    private String username;
     private String password;
     private final Collection<? extends GrantedAuthority> authorities;
     private String propertyType;
@@ -28,21 +29,22 @@ public class CustomUserDetails implements UserDetails {
     private String propertyDescription;
 
 
-    public CustomUserDetails(UserEntity profileUser, List<ProfileRole> rolesList) {
-        this.userId = profileUser.getProfileUserId();
-        this.firstName = profileUser.getFirstName();
-        this.lastName = profileUser.getLastName();
-        this.phoneNumber = profileUser.getPhoneNumber();
-        this.email = profileUser.getEmail();
-        this.userName = profileUser.getUsername();
-        this.password = profileUser.getPassword();
+    public CustomUserDetails(UserEntity user, List<ProfileRole> rolesList) {
+        System.out.println("user ID:CustomUserDetails --------> " + user.getProfileUserId());
+        this.userId = user.getProfileUserId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.phoneNumber = user.getPhoneNumber();
+        this.email = user.getEmail();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
         this.authorities = rolesList.stream().map(role -> new SimpleGrantedAuthority(role.name())).toList();
-        this.propertyType = profileUser.getPropertyType();
-        this.propertyAddress = profileUser.getPropertyAddress();
-        this.numberOfRooms = profileUser.getNumberOfRooms();
-        this.hasParking = profileUser.getHasParking();
-        this.starRating = profileUser.getStarRating();
-        this.propertyDescription = profileUser.getPropertyDescription();
+        this.propertyType = user.getPropertyType();
+        this.propertyAddress = user.getPropertyAddress();
+        this.numberOfRooms = user.getNumberOfRooms();
+        this.hasParking = user.getHasParking();
+        this.starRating = user.getStarRating();
+        this.propertyDescription = user.getPropertyDescription();
     }
 
 
@@ -58,7 +60,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -89,3 +91,4 @@ public class CustomUserDetails implements UserDetails {
         this.userId = userId;
     }
 }
+

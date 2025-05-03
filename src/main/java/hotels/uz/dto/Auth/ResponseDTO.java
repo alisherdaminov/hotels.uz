@@ -26,6 +26,7 @@ public class ResponseDTO {
     private String starRating;
     private String propertyDescription;
     private String jwtToken;
+    private String refreshToken;
     private LocalDateTime createdDate;
 
 }

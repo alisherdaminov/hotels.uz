@@ -1,6 +1,7 @@
 package hotels.uz.config.validation;
 
 import hotels.uz.dto.Auth.JwtDTO;
+import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.util.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -25,14 +26,13 @@ import java.util.Arrays;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    public UserDetailsService userDetailsService;
-
+    private UserDetailsService userDetailsService;
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         return Arrays
                 .stream(SpringConfig.AUTH_WHITELIST)
-                .anyMatch(path -> antPathMatcher.match(path, request.getRequestURI()));
+                .anyMatch(p -> antPathMatcher.match(p, request.getRequestURI()));
     }
 
     @Override
@@ -45,22 +45,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         try {
-            String token = authHeader.substring(7).trim();
+            final String token = authHeader.substring(7).trim();
             JwtDTO jwtDTO = JwtUtil.decode(token);
-            String email = jwtDTO.getUsername();
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+            // load user depending on role
+            String username = jwtDTO.getUsername();
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
                     userDetails.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
-
         } catch (JwtException | UsernameNotFoundException e) {
             filterChain.doFilter(request, response);
         }
-
-
     }
 }
+

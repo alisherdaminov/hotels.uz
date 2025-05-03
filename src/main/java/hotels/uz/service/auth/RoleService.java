@@ -1,8 +1,8 @@
 package hotels.uz.service.auth;
 
-import hotels.uz.entity.RoleEntity;
+import hotels.uz.entity.auth.RoleEntity;
 import hotels.uz.enums.ProfileRole;
-import hotels.uz.repository.RoleRepository;
+import hotels.uz.repository.auth.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

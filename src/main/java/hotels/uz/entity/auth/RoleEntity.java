@@ -1,4 +1,4 @@
-package hotels.uz.entity;
+package hotels.uz.entity.auth;
 
 import hotels.uz.enums.ProfileRole;
 import jakarta.persistence.*;
@@ -29,5 +29,5 @@ public class RoleEntity {
     private ProfileRole profileRoles;
 
     @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate=LocalDateTime.now();
 }
