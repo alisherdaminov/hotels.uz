@@ -1,6 +1,7 @@
 package hotels.uz.entity.auth;
 
 import hotels.uz.entity.hotels.HotelsEntity;
+import hotels.uz.entity.hotels.ShortAdvertsEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,6 +60,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
     private List<HotelsEntity> hotels;
+
+    @OneToMany(mappedBy = "usersAdverts", fetch = FetchType.LAZY)
+    private List<ShortAdvertsEntity> shortAdvertsEntity;
 
     @OneToMany(mappedBy = "profileUser", fetch = FetchType.LAZY)
     private List<RoleEntity> roleEntityList;

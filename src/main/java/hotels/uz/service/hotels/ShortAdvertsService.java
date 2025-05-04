@@ -25,6 +25,7 @@ public class ShortAdvertsService {
             entity.setTitle(advertsCreatedDTO.getTitle());
             entity.setStayDescription(advertsCreatedDTO.getStayDescription());
             entity.setDiscountDescription(advertsCreatedDTO.getDiscountDescription());
+            entity.setUserId(SpringSecurityUtil.getCurrentUserId());
             shortAdvertsRepository.save(entity);
         }
         return toDTO(entity);
@@ -40,29 +41,31 @@ public class ShortAdvertsService {
         return shortAdvertsDTOList;
     }
 
-    //UPDATE BY ID
+    // UPDATE BY ID
     public ShortAdvertsDTO updateShortAdverts(ShortAdvertsCreatedDTO advertsCreatedDTO, String advertsId) {
         ShortAdvertsEntity entity = getById(advertsId);
         if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE)) {
-            entity.setTitle(advertsCreatedDTO.getTitle());
-            entity.setStayDescription(advertsCreatedDTO.getStayDescription());
-            entity.setDiscountDescription(advertsCreatedDTO.getDiscountDescription());
+            String title = advertsCreatedDTO.getTitle();
+            String stayDesc = advertsCreatedDTO.getStayDescription();
+            String discountDesc = advertsCreatedDTO.getDiscountDescription();
+            shortAdvertsRepository.updateShortAdverts(title, stayDesc, discountDesc, advertsId);
         }
-        shortAdvertsRepository.updateShortAdverts(entity, advertsId);
         return toDTO(entity);
     }
+
 
     //DELETE BY ID
     public String deleteShortAdverts(String advertsId) {
         if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE)) {
             shortAdvertsRepository.delete(getById(advertsId));
         }
-        return "";
+        return "Deleted";
     }
 
     //TO DTO
     public ShortAdvertsDTO toDTO(ShortAdvertsEntity entity) {
         ShortAdvertsDTO dto = new ShortAdvertsDTO();
+        dto.setShortAdvertsId(entity.getShortAdvertsId());
         dto.setTitle(entity.getTitle());
         dto.setStayDescription(entity.getStayDescription());
         dto.setDiscountDescription(entity.getDiscountDescription());

@@ -1,19 +1,14 @@
 package hotels.uz.controller;
 
-import hotels.uz.config.validation.CustomUserDetails;
 import hotels.uz.dto.Auth.ApplicationData;
 import hotels.uz.dto.hotels.created.PostCreatedDTO;
 import hotels.uz.dto.hotels.dto.PostDTO;
-import hotels.uz.service.hotels.HotelsPostService;
-import hotels.uz.util.SpringSecurityUtil;
+import hotels.uz.service.hotels.HotelsPostsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -25,7 +20,7 @@ import java.util.List;
 public class HotelsPostController {
 
     @Autowired
-    private HotelsPostService hotelsPostService;
+    private HotelsPostsService hotelsPostService;
 
     @PreAuthorize("hasRole('HOTEL_ROLE')")
     @PostMapping("/create_post/{userId}")

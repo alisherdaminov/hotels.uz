@@ -1,5 +1,6 @@
 package hotels.uz.entity.hotels;
 
+import hotels.uz.entity.auth.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +23,12 @@ public class ShortAdvertsEntity {
     private String discountDescription;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
+
+    @Column(name = "profile_id")
+    private Integer userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
+    private UserEntity usersAdverts;
+
 }

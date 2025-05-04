@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShortAdvertsRepository extends JpaRepository<ShortAdvertsEntity, String> {
-
     @Transactional
     @Modifying
-    @Query("UPDATE ShortAdvertsEntity s SET s.title = ?1, s.stayDescription = ?2, s.discountDescription = ?3 WHERE s.shortAdvertsId = ?4")
-    void updateShortAdverts( ShortAdvertsEntity entity, String shortAdvertsId);
+    @Query("UPDATE ShortAdvertsEntity s SET s.title = ?1, s.stayDescription = ?2, " +
+            "s.discountDescription = ?3 WHERE s.shortAdvertsId = ?4")
+    void updateShortAdverts(String title, String stayDescription, String discountDescription, String shortAdvertsId);
+
 }
