@@ -55,4 +55,11 @@ public class HotelsPostController {
         return ResponseEntity.ok().body(new ApplicationData<>(hotelsPostService.updateHotelsPost(hotelsPostId, postCreatedDTO)
                 , "Success", new Date()));
     }
+
+    @PreAuthorize("hasRole('HOTEL_ROLE')")
+    @DeleteMapping("/delete_post/{hotelsPostId}")
+    public ResponseEntity<ApplicationData<String>> deleteHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId) {
+        return ResponseEntity.ok().body(new ApplicationData<>(hotelsPostService.deleteHotelsPost(hotelsPostId),
+                "Post successfully deleted", new Date()));
+    }
 }
