@@ -1,7 +1,9 @@
 package hotels.uz.entity.auth;
 
 import hotels.uz.entity.hotels.HotelsEntity;
+import hotels.uz.entity.hotels.MainAddsEntity;
 import hotels.uz.entity.hotels.ShortAdvertsEntity;
+import hotels.uz.entity.hotels.likes.UserLikes;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,11 +60,17 @@ public class UserEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "userLikes", fetch = FetchType.LAZY)
+    private List<UserLikes> userLikes;
+
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
     private List<HotelsEntity> hotels;
 
-    @OneToMany(mappedBy = "usersAdverts", fetch = FetchType.LAZY)
-    private List<ShortAdvertsEntity> shortAdvertsEntity;
+    @OneToOne(mappedBy = "userMainAdds", fetch = FetchType.LAZY)
+    private MainAddsEntity mainAdds;
+
+    @OneToOne(mappedBy = "usersAdverts", fetch = FetchType.LAZY)
+    private ShortAdvertsEntity shortAdvertsEntity;
 
     @OneToMany(mappedBy = "profileUser", fetch = FetchType.LAZY)
     private List<RoleEntity> roleEntityList;

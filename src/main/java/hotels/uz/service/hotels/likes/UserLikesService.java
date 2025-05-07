@@ -6,6 +6,7 @@ import hotels.uz.entity.hotels.likes.UserLikes;
 import hotels.uz.repository.auth.UserRepository;
 import hotels.uz.repository.hotels.HotelDetailsRepository;
 import hotels.uz.repository.hotels.likes.UserLikesRepository;
+import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,20 +23,22 @@ public class UserLikesService {
     private UserRepository userRepository;
 
     public boolean isLiked(String postId, Integer userId) {
-        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        HotelsDetailsEntity hotelDetailsEntity = hotelDetailsRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-        Optional<UserLikes> optionalLike = userLikesRepository.findByUserAndHotel(userEntity, hotelDetailsEntity);
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        HotelsDetailsEntity post = hotelDetailsRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        Optional<UserLikes> like = userLikesRepository.findByUserAndHotel(user, post);
 
-        if (optionalLike.isPresent()) {
-            UserLikes userLikes = optionalLike.get();
+        if (like.isPresent()) {
+            UserLikes userLikes = like.get();
             userLikes.setLiked(!userLikes.isLiked()); // Toggle like status
+            userLikes.setUserId(SpringSecurityUtil.getCurrentUserId());
             userLikesRepository.save(userLikes);
             return userLikes.isLiked(); // Return current status
         } else {
             UserLikes newLike = new UserLikes();
-            newLike.setUserLikes(userEntity);
-            newLike.setHotelsDetailsPosts(hotelDetailsEntity);
+            newLike.setUserLikes(user);
+            newLike.setHotelsDetailsPosts(post);
             newLike.setLiked(true);
+            newLike.setUserId(SpringSecurityUtil.getCurrentUserId());
             userLikesRepository.save(newLike);
             return true;
         }

@@ -28,10 +28,10 @@ public class ShortAdvertsController {
                 "Success", new Date()));
 
     }
-
-    @GetMapping("/fetch_all")
-    public ResponseEntity<ApplicationData<List<ShortAdvertsDTO>>> findAllShortAdverts() {
-        return ResponseEntity.ok().body(new ApplicationData<>(shortAdvertsService.findAllShortAdverts(),
+    @PreAuthorize("hasRole('HOTEL_ROLE')")
+    @GetMapping("/fetch/{shortAdvertsId}")
+    public ResponseEntity<ApplicationData<ShortAdvertsDTO>> findShortAdverts(@PathVariable("shortAdvertsId") String shortAdvertsId) {
+        return ResponseEntity.ok().body(new ApplicationData<>(shortAdvertsService.findShortAdverts(shortAdvertsId),
                 "Success", new Date()));
     }
 

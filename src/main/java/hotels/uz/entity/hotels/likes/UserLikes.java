@@ -18,8 +18,11 @@ public class UserLikes {
     @Column(name = "liked")
     private boolean liked;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @Column(name = "user_id")
+    private Integer userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",insertable=false, updatable=false)
     private UserEntity userLikes;
 
     @ManyToOne
