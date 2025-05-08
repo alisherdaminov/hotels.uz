@@ -15,8 +15,5 @@ public interface MainAddsRepository extends JpaRepository<MainAddsEntity, String
     @Query("SELECT COUNT(s) > 0 FROM MainAddsEntity s WHERE s.addsExpirationDate > :now")
     boolean isExistExpirationDate(@Param("now") LocalDateTime now);
 
-    @Query("SELECT m MainAddsEntity m WHERE m.mainAddsId = :mainAddsId")
-    MainAddsEntity findByMainAddsId(@Param("mainAddsId") String mainAddsId);
-
 
 }

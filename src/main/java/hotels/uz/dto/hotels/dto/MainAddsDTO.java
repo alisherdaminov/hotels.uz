@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MainAddsDTO {
 
-    private String mainAddsId;
-    private String title;
-    private String description;
-    private String image;
+    private String photoId;
+    private String origenName;
+    private String extension;
+    private Long size;
+    private String url;
     private LocalDateTime createdDate;
 }

@@ -66,8 +66,12 @@ public class UserEntity {
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
     private List<HotelsEntity> hotels;
 
-    @OneToOne(mappedBy = "userMainAdds", fetch = FetchType.LAZY)
-    private MainAddsEntity mainAdds;
+    @Column(name = "photo_id")
+    private String photoId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id", insertable = false, updatable = false)
+    private UserEntity userMainAdds;
 
     @OneToOne(mappedBy = "usersAdverts", fetch = FetchType.LAZY)
     private ShortAdvertsEntity shortAdvertsEntity;

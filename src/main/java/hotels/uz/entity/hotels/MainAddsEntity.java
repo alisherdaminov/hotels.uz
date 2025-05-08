@@ -1,6 +1,5 @@
 package hotels.uz.entity.hotels;
 
-import hotels.uz.entity.auth.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,12 +13,15 @@ import java.time.LocalDateTime;
 public class MainAddsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String mainAddsId;
-    @Column(name = "title")
-    private String title;
-    @Column(name = "description")
-    private String description;
+    private String photoId;
+    @Column(name = "path")
+    private String path;
+    @Column(name = "extension")
+    private String extension;
+    @Column(name = "original_name")
+    private String originalName;
+    @Column(name = "size")
+    private Long size;
     @Column(name = "image")
     private String image;
     @Column(name = "adds_expiration_date")
@@ -27,10 +29,4 @@ public class MainAddsEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
 
-    @Column(name = "profile_id")
-    private Integer userId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
-    private UserEntity userMainAdds;
 }
