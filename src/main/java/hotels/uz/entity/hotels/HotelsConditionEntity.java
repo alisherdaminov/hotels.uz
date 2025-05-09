@@ -15,7 +15,6 @@ public class HotelsConditionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String hotelsConditionId;
-
     @Column(name = "condition_name_of_item")
     private String conditionNameOfItem;
 
