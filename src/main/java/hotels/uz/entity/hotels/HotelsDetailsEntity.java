@@ -29,9 +29,9 @@ public class HotelsDetailsEntity {
     @Column(name = "price_short_description")
     private String priceShortDescription;
     @Column(name = "total_price")
-    private int totalPrice;
+    private Integer totalPrice;
     @Column(name = "discount_price")
-    private int discountPrice;
+    private Integer discountPrice;
     @Column(name = "hotels_short_title")
     private String hotelsShortTitle;
     @Column(name = "cancellation_title")

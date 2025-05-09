@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)// null degan qiymatlarni olmaydi
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HotelsConditionDTO {
     private String conditionName;
-   // private LocalDateTime createdDate;
 }

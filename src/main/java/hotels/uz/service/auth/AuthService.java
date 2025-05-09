@@ -33,10 +33,10 @@ public class AuthService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public ApplicationData<String> userRegistration(CreatedUserDTO dto, AppLanguage language) {
+    public ApiResponse<String> userRegistration(CreatedUserDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
-            return new ApplicationData<>("user.exists");
+            return new ApiResponse<>("user.exists");
         }
         UserEntity entity = new UserEntity();
         entity.setFirstName(dto.getFirstName());
@@ -48,13 +48,13 @@ public class AuthService {
         entity.setCreatedDate(LocalDateTime.now());
         authRepository.save(entity);
         roleService.createRole(entity.getProfileUserId(), ProfileRole.USER_ROLE);
-        return new ApplicationData<>("User successfully registered");
+        return new ApiResponse<>("User successfully registered");
     }
 
-    public ApplicationData<String> hotelRegistration(CreatedUserDTO dto, AppLanguage language) {
+    public ApiResponse<String> hotelRegistration(CreatedUserDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
-            return new ApplicationData<>("user.exists");
+            return new ApiResponse<>("user.exists");
         }
         UserEntity entity = new UserEntity();
         entity.setFirstName(dto.getFirstName());
@@ -72,21 +72,21 @@ public class AuthService {
         entity.setCreatedDate(LocalDateTime.now());
         authRepository.save(entity);
         roleService.createRole(entity.getProfileUserId(), ProfileRole.HOTEL_ROLE);
-        return new ApplicationData<>("Hotel successfully registered");
+        return new ApiResponse<>("Hotel successfully registered");
     }
 
-    public ApplicationData<ResponseDTO> login(LoginDTO loginRequest, AppLanguage language) {
+    public ApiResponse<ResponseDTO> login(LoginDTO loginRequest, AppLanguage language) {
         Optional<UserEntity> optionalUser = authRepository.findByUsername(loginRequest.getUsername());
         System.out.println("optionalUser login fun ----> " + optionalUser);
         if (optionalUser.isEmpty()) {
-            return new ApplicationData<>("user.not.found");
+            return new ApiResponse<>("user.not.found");
         }
         UserEntity user = optionalUser.get();
         if (!bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return new ApplicationData<>("wrong.password");
+            return new ApiResponse<>("wrong.password");
         }
         ResponseDTO userDTO = buildUserDTO(user);
-        return new ApplicationData<>(userDTO, "success", new Date());
+        return new ApiResponse<>(userDTO, "success", new Date());
     }
 
 

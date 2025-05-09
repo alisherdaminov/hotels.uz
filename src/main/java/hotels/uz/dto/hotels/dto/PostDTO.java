@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO {
-    private String postDtoId;
+    private String postId;
     private String regionName;
     private String properties;
     private String description;

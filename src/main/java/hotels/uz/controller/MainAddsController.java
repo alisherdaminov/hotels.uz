@@ -1,6 +1,6 @@
 package hotels.uz.controller;
 
-import hotels.uz.dto.Auth.ApplicationData;
+import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.dto.MainAddsDTO;
 import hotels.uz.service.hotels.MainAddsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@ public class MainAddsController {
     private MainAddsService mainAddsService;
 
     @PostMapping("/upload/{userId}")
-    public ResponseEntity<ApplicationData<MainAddsDTO>> uploadImage(@RequestParam("file") MultipartFile file,
-                                                                    @PathVariable("userId") Integer userId) {
-        return ResponseEntity.ok().body(new ApplicationData<>(mainAddsService.uploadImage(file, userId),
+    public ResponseEntity<ApiResponse<MainAddsDTO>> uploadImage(@RequestParam("file") MultipartFile file,
+                                                                @PathVariable("userId") Integer userId) {
+        return ResponseEntity.ok().body(new ApiResponse<>(mainAddsService.uploadImage(file, userId),
                 "Success", new Date()));
     }
 
@@ -31,8 +31,8 @@ public class MainAddsController {
     }
 
     @DeleteMapping("/delete/{photoId}")
-    public ResponseEntity<ApplicationData<String>> deleteAdds(@PathVariable("photoId") String photoId) {
-        return ResponseEntity.ok().body(new ApplicationData<>(mainAddsService.deleteAdds(photoId),
+    public ResponseEntity<ApiResponse<String>> deleteAdds(@PathVariable("photoId") String photoId) {
+        return ResponseEntity.ok().body(new ApiResponse<>(mainAddsService.deleteAdds(photoId),
                 "Success", new Date()));
     }
 }

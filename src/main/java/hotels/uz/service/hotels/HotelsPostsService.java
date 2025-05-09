@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,20 +60,32 @@ public class HotelsPostsService {
         }
         return toInfoDTO(hotels);
     }
-
     //GET ALL POSTS
     public List<PostDTO> findAllHotelsPost() {
-        List<HotelsEntity> hotelsEntityList = hotelsRepository.findAllWithDetails();
+        List<HotelsEntity> hotelsEntityList = hotelsRepository.findAllWithDetails(); // bu JOIN FETCH bilan bo'lishi kerak
         List<PostDTO> postDTOList = new LinkedList<>();
+
+        System.out.println("Fetched Hotels Count: " + hotelsEntityList.size());
+
         for (HotelsEntity entity : hotelsEntityList) {
+            List<HotelsDetailsEntity> detailsList = entity.getHotelsDetailsEntityList();
+
+            if (detailsList != null) {
+                System.out.println("Details Count for Hotel " + entity.getHotelsId() + ": " + detailsList.size());
+            } else {
+                System.out.println("Details Count for Hotel " + entity.getHotelsId() + ": null");
+            }
+
             postDTOList.add(toPostDTO(entity));
         }
+
         return postDTOList;
     }
 
+
     private PostDTO toPostDTO(HotelsEntity entity) {
         PostDTO dto = new PostDTO();
-        dto.setPostDtoId(entity.getHotelsId());
+        dto.setPostId(entity.getHotelsId());
         dto.setRegionName(entity.getRegionName());
         dto.setProperties(entity.getProperties());
         dto.setDescription(entity.getDescription());
@@ -81,10 +94,14 @@ public class HotelsPostsService {
         dto.setRegionImage(entity.getRegionImage());
         dto.setCreatedDate(entity.getCreatedDate());
 
-        List<HotelsDetailsDTO> detailsDTOList = entity.getHotelsDetailsEntityList().stream()
-                .map(this::toHotelsDetailsDTO)
-                .collect(Collectors.toList());
+        List<HotelsDetailsDTO> detailsDTOList = new ArrayList<>();
 
+        if (entity.getHotelsDetailsEntityList() != null) {
+            detailsDTOList = entity.getHotelsDetailsEntityList().stream()
+                    .map(this::toHotelsDetailsDTO)
+                    .collect(Collectors.toList());
+        }
+        System.out.println("Details Count for HotelsDetailsDTO "+entity.getHotelsDetailsEntityList()+" === " + entity.getHotelsId() + ": " + detailsDTOList.size());
         dto.setHotelsDetailsDTOList(detailsDTOList);
         return dto;
     }
@@ -108,26 +125,28 @@ public class HotelsPostsService {
         dto.setRoomsDeluxeName(entity.getRoomsDeluxeName());
         dto.setOrdered(entity.isOrdered());
 
-        List<HotelsConditionDTO> conditionDTOList = entity.getHotelsConditionEntityList().stream()
-                .map(this::toConditionDTO)
-                .collect(Collectors.toList());
+        List<HotelsConditionDTO> conditionDTOList = new ArrayList<>();
+        if (entity.getHotelsConditionEntityList() != null) {
+            conditionDTOList = entity.getHotelsConditionEntityList().stream()
+                    .map(this::toConditionDTO)
+                    .collect(Collectors.toList());
+        }
 
         dto.setConditionNameOfItemList(conditionDTOList);
         return dto;
     }
-
     private HotelsConditionDTO toConditionDTO(HotelsConditionEntity entity) {
         HotelsConditionDTO dto = new HotelsConditionDTO();
         dto.setConditionName(entity.getConditionNameOfItem());
         return dto;
     }
 
+
     // GET BY ID
     public PostDTO getHotelsPostById(String hotelsPostId) {
         HotelsEntity getHotelsPostId = getHotelsPostId(hotelsPostId);
         return toInfoDTO(getHotelsPostId);
     }
-
     //UPDATE BY ID
     public PostDTO updateHotelsPost(String hotelsPostId, PostCreatedDTO postCreatedDTO) {
         HotelsEntity hotels = getHotelsPostId(hotelsPostId);
@@ -151,7 +170,6 @@ public class HotelsPostsService {
         }
         return toInfoDTO(hotels);
     }
-
     //DELETE BY ID
     public String deleteHotelsPost(String hotelsPostId) {
         if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE)) {
@@ -159,44 +177,10 @@ public class HotelsPostsService {
         }
         return "Deleted";
     }
-
-    // FOR NESTED ENTITY ON CREATE AND UPDATE METHOD
-    private static HotelsDetailsEntity getHotelsDetailsEntity(HotelsDetailsDTO dto, HotelsEntity hotels) {
-        HotelsDetailsEntity entity = new HotelsDetailsEntity();
-        entity.setHotelName(dto.getHotelName());
-        entity.setLocationShortDescription(dto.getLocationShortDescription());
-        entity.setHotelShortDescription(dto.getHotelShortDescription());
-        entity.setRoomShortDescription(dto.getRoomShortDescription());
-        entity.setPriceShortDescription(dto.getPriceShortDescription());
-        entity.setTotalPrice(dto.getTotalPrice());
-        entity.setDiscountPrice(dto.getDiscountPrice());
-        entity.setHotelsShortTitle(dto.getHotelsShortTitle());
-        entity.setCancellationTitle(dto.getCancellationTitle());
-        entity.setPaymentDescription(dto.getPaymentDescription());
-        entity.setBreakfastIncludedDescription(dto.getBreakfastIncludedDescription());
-        entity.setHotelImage(dto.getHotelImage());
-        entity.setOrdered(dto.isOrdered());
-        entity.setDiscountAddsTitle(dto.getDiscountAddsTitle());
-        entity.setDiscountAddsDescription(dto.getDiscountAddsDescription());
-        entity.setRoomsDeluxeName(dto.getRoomsDeluxeName());
-        entity.setHotelsEntity(hotels); // Link to parent
-
-        // Handle nested condition list
-        List<HotelsConditionEntity> conditionEntities = new ArrayList<>();
-        for (HotelsConditionDTO conditionDTO : dto.getConditionNameOfItemList()) {
-            HotelsConditionEntity condition = new HotelsConditionEntity();
-            condition.setConditionNameOfItem(conditionDTO.getConditionName());
-            condition.setHotelsDetailsEntity(entity); // Link to parent detail
-            conditionEntities.add(condition);
-        }
-        entity.setHotelsConditionEntityList(conditionEntities);
-        return entity;
-    }
-
     // FOR NESTED ENTITY ON CREATE AND UPDATE METHOD
     public PostDTO toInfoDTO(HotelsEntity entity) {
         PostDTO postDTO = new PostDTO();
-        postDTO.setPostDtoId(entity.getHotelsId());
+        postDTO.setPostId(entity.getHotelsId());
         postDTO.setRegionName(entity.getRegionName());
         postDTO.setProperties(entity.getProperties());
         postDTO.setDescription(entity.getDescription());
@@ -239,6 +223,38 @@ public class HotelsPostsService {
         }
         postDTO.setHotelsDetailsDTOList(hotelsDetailsDTOList);
         return postDTO;
+    }
+    // FOR NESTED ENTITY ON CREATE AND UPDATE METHOD
+    private static HotelsDetailsEntity getHotelsDetailsEntity(HotelsDetailsDTO dto, HotelsEntity hotels) {
+        HotelsDetailsEntity entity = new HotelsDetailsEntity();
+        entity.setHotelName(dto.getHotelName());
+        entity.setLocationShortDescription(dto.getLocationShortDescription());
+        entity.setHotelShortDescription(dto.getHotelShortDescription());
+        entity.setRoomShortDescription(dto.getRoomShortDescription());
+        entity.setPriceShortDescription(dto.getPriceShortDescription());
+        entity.setTotalPrice(dto.getTotalPrice());
+        entity.setDiscountPrice(dto.getDiscountPrice());
+        entity.setHotelsShortTitle(dto.getHotelsShortTitle());
+        entity.setCancellationTitle(dto.getCancellationTitle());
+        entity.setPaymentDescription(dto.getPaymentDescription());
+        entity.setBreakfastIncludedDescription(dto.getBreakfastIncludedDescription());
+        entity.setHotelImage(dto.getHotelImage());
+        entity.setOrdered(dto.isOrdered());
+        entity.setDiscountAddsTitle(dto.getDiscountAddsTitle());
+        entity.setDiscountAddsDescription(dto.getDiscountAddsDescription());
+        entity.setRoomsDeluxeName(dto.getRoomsDeluxeName());
+        entity.setHotelsEntity(hotels); // Link to parent
+
+        // Handle nested condition list
+        List<HotelsConditionEntity> conditionEntities = new ArrayList<>();
+        for (HotelsConditionDTO conditionDTO : dto.getConditionNameOfItemList()) {
+            HotelsConditionEntity condition = new HotelsConditionEntity();
+            condition.setConditionNameOfItem(conditionDTO.getConditionName());
+            condition.setHotelsDetailsEntity(entity); // Link to parent detail
+            conditionEntities.add(condition);
+        }
+        entity.setHotelsConditionEntityList(conditionEntities);
+        return entity;
     }
 
 

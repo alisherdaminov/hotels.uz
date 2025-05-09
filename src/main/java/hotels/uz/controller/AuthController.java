@@ -19,40 +19,40 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/user/registration")
-    public ResponseEntity<ApplicationData<String>> userRegistration(@Valid
+    public ResponseEntity<ApiResponse<String>> userRegistration(@Valid
                                                                     @RequestBody CreatedUserDTO createdUserDTO,
-                                                                    @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
+                                                                @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.userRegistration(createdUserDTO, language));
     }
 
 
     @PostMapping("/hotel/registration")
-    public ResponseEntity<ApplicationData<String>> hotelRegistration(@Valid
+    public ResponseEntity<ApiResponse<String>> hotelRegistration(@Valid
                                                                      @RequestBody CreatedUserDTO createdUserDTO,
-                                                                     @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
+                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.hotelRegistration(createdUserDTO, language));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApplicationData<ResponseDTO>> login(@Valid
+    public ResponseEntity<ApiResponse<ResponseDTO>> login(@Valid
                                                               @RequestBody LoginDTO loginDTO,
-                                                              @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
+                                                          @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.login(loginDTO, language));
     }
 
     //    @PostMapping("/refresh")
-//    public ApplicationData<AccessTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshToken) {
+//    public ApiResponse<AccessTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshToken) {
 //        return authService.refreshToken(refreshToken);
 //    }
     @PostMapping("/logout/{userId}")
-    public ResponseEntity<ApplicationData<String>> logoutUser(@PathVariable("userId") Integer userId, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<String>> logoutUser(@PathVariable("userId") Integer userId, HttpServletRequest request) {
         boolean success = authService.logoutByUserId(userId);
         if (success) {
             request.getSession().invalidate(); // optional
-            return ResponseEntity.ok().body(new ApplicationData<>("successfully logout!!!"));
+            return ResponseEntity.ok().body(new ApiResponse<>("successfully logout!!!"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApplicationData<>("User not found"));
+                    .body(new ApiResponse<>("User not found"));
         }
     }
 

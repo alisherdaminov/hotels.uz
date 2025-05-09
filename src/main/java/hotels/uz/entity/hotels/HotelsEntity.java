@@ -41,5 +41,5 @@ public class HotelsEntity {
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "hotelsEntity", fetch = FetchType.LAZY)
-    private List<HotelsDetailsEntity> hotelsDetailsEntityList = new ArrayList<>();
+    private List<HotelsDetailsEntity> hotelsDetailsEntityList;
 }

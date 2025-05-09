@@ -1,6 +1,6 @@
 package hotels.uz.controller;
 
-import hotels.uz.dto.Auth.ApplicationData;
+import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.created.CommentsCreatedDTO;
 import hotels.uz.dto.hotels.dto.CommentsDTO;
 import hotels.uz.service.hotels.CommentsService;
@@ -20,31 +20,31 @@ public class CommentsController {
     private CommentsService commentsService;
 
     @PostMapping("/create/{userId}/{hotelsDetailsId}")
-    public ResponseEntity<ApplicationData<CommentsDTO>> createComment(@RequestBody CommentsCreatedDTO dto,
-                                                                      @PathVariable("userId") Integer userId,
-                                                                      @PathVariable("hotelsDetailsId") String hotelsDetailsId) {
-        return ResponseEntity.ok().body(new ApplicationData<>(commentsService.createComment(dto, userId, hotelsDetailsId),
+    public ResponseEntity<ApiResponse<CommentsDTO>> createComment(@RequestBody CommentsCreatedDTO dto,
+                                                                  @PathVariable("userId") Integer userId,
+                                                                  @PathVariable("hotelsDetailsId") String hotelsDetailsId) {
+        return ResponseEntity.ok().body(new ApiResponse<>(commentsService.createComment(dto, userId, hotelsDetailsId),
                 "Success", new Date()));
     }
 
     @GetMapping("/fetch")
-    public ResponseEntity<ApplicationData<List<CommentsDTO>>> findAllComments() {
-        return ResponseEntity.ok().body(new ApplicationData<>(commentsService.findAllComments(),
+    public ResponseEntity<ApiResponse<List<CommentsDTO>>> findAllComments() {
+        return ResponseEntity.ok().body(new ApiResponse<>(commentsService.findAllComments(),
                 "Success", new Date()));
     }
 
     @PreAuthorize("hasRole(ADMIN_ROLE)")
     @PutMapping("/update/{commentId}")
-    public ResponseEntity<ApplicationData<CommentsDTO>> updateComment(@PathVariable("commentId") String commentId,
-                                                                      @RequestBody CommentsCreatedDTO dto) {
-        return ResponseEntity.ok().body(new ApplicationData<>(commentsService.updateComment(commentId, dto),
+    public ResponseEntity<ApiResponse<CommentsDTO>> updateComment(@PathVariable("commentId") String commentId,
+                                                                  @RequestBody CommentsCreatedDTO dto) {
+        return ResponseEntity.ok().body(new ApiResponse<>(commentsService.updateComment(commentId, dto),
                 "Success", new Date()));
     }
 
     @PreAuthorize("hasRole(ADMIN_ROLE)")
     @DeleteMapping("/delete/{commentId}")
-    public ResponseEntity<ApplicationData<String>> deleteComment(@PathVariable("commentId") String commentId) {
-        return ResponseEntity.ok().body(new ApplicationData<>(commentsService.deleteComment(commentId),
+    public ResponseEntity<ApiResponse<String>> deleteComment(@PathVariable("commentId") String commentId) {
+        return ResponseEntity.ok().body(new ApiResponse<>(commentsService.deleteComment(commentId),
                 "Success", new Date()));
     }
 
