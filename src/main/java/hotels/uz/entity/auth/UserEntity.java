@@ -1,5 +1,6 @@
 package hotels.uz.entity.auth;
 
+import hotels.uz.entity.hotels.CommentEntity;
 import hotels.uz.entity.hotels.HotelsEntity;
 import hotels.uz.entity.hotels.MainAddsEntity;
 import hotels.uz.entity.hotels.ShortAdvertsEntity;
@@ -78,6 +79,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "profileUser", fetch = FetchType.LAZY)
     private List<RoleEntity> roleEntityList;
+    //comment
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntityUserList;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private RefreshTokenEntity refreshToken;
