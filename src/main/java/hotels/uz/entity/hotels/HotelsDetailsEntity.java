@@ -1,11 +1,8 @@
 package hotels.uz.entity.hotels;
 
-import hotels.uz.entity.auth.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +48,11 @@ public class HotelsDetailsEntity {
     @Column(name = "rooms_deluxe_name")
     private String roomsDeluxeName;
 
+    @Column(name = "hotel_id")
+    private String hotelId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id", insertable = false, updatable = false)
     private HotelsEntity hotelsEntity;
 
     @OneToMany(mappedBy = "hotelsDetailsEntity", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -60,93 +60,75 @@ public class HotelsPostsService {
         }
         return toInfoDTO(hotels);
     }
+
     //GET ALL POSTS
+
     public List<PostDTO> findAllHotelsPost() {
-        List<HotelsEntity> hotelsEntityList = hotelsRepository.findAllWithDetails(); // bu JOIN FETCH bilan bo'lishi kerak
-        List<PostDTO> postDTOList = new LinkedList<>();
-
-        System.out.println("Fetched Hotels Count: " + hotelsEntityList.size());
-
-        for (HotelsEntity entity : hotelsEntityList) {
-            List<HotelsDetailsEntity> detailsList = entity.getHotelsDetailsEntityList();
-
-            if (detailsList != null) {
-                System.out.println("Details Count for Hotel " + entity.getHotelsId() + ": " + detailsList.size());
-            } else {
-                System.out.println("Details Count for Hotel " + entity.getHotelsId() + ": null");
-            }
-
-            postDTOList.add(toPostDTO(entity));
-        }
-
-        return postDTOList;
+        List<HotelsEntity> hotelsEntityList = hotelsRepository.findAllWithDetails();
+        return hotelsEntityList.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
 
-    private PostDTO toPostDTO(HotelsEntity entity) {
+    private PostDTO mapToDTO(HotelsEntity region) {
         PostDTO dto = new PostDTO();
-        dto.setPostId(entity.getHotelsId());
-        dto.setRegionName(entity.getRegionName());
-        dto.setProperties(entity.getProperties());
-        dto.setDescription(entity.getDescription());
-        dto.setAveragePrice(entity.getAveragePrice());
-        dto.setDealsStarted(entity.getDealsStarted());
-        dto.setRegionImage(entity.getRegionImage());
-        dto.setCreatedDate(entity.getCreatedDate());
-
-        List<HotelsDetailsDTO> detailsDTOList = new ArrayList<>();
-
-        if (entity.getHotelsDetailsEntityList() != null) {
-            detailsDTOList = entity.getHotelsDetailsEntityList().stream()
-                    .map(this::toHotelsDetailsDTO)
-                    .collect(Collectors.toList());
+        dto.setRegionName(region.getRegionName());
+        dto.setProperties(region.getProperties());
+        dto.setDescription(region.getDescription());
+        dto.setAveragePrice(region.getAveragePrice());
+        dto.setDealsStarted(region.getDealsStarted());
+        dto.setRegionImage(region.getRegionImage());
+        System.out.println("region: " + region.getRegionName());
+        for (HotelsDetailsEntity entity : region.getHotelsDetailsEntityList()) {
+            System.out.println("entity: " + entity.getHotelName());
         }
-        System.out.println("Details Count for HotelsDetailsDTO "+entity.getHotelsDetailsEntityList()+" === " + entity.getHotelsId() + ": " + detailsDTOList.size());
-        dto.setHotelsDetailsDTOList(detailsDTOList);
+        dto.setHotelsDetailsDTOList(
+                region.getHotelsDetailsEntityList().stream().map(hotel -> {
+                    System.out.println("hotel: " + hotel.getHotelName());
+
+                    HotelsDetailsDTO hotelDTO = new HotelsDetailsDTO();
+                    hotelDTO.setHotelName(hotel.getHotelName());
+                    hotelDTO.setLocationShortDescription(hotel.getLocationShortDescription());
+                    hotelDTO.setHotelShortDescription(hotel.getHotelShortDescription());
+                    hotelDTO.setRoomShortDescription(hotel.getRoomShortDescription());
+                    hotelDTO.setPriceShortDescription(hotel.getPriceShortDescription());
+                    hotelDTO.setTotalPrice(hotel.getTotalPrice());
+                    hotelDTO.setDiscountPrice(hotel.getDiscountPrice());
+                    hotelDTO.setHotelsShortTitle(hotel.getHotelsShortTitle());
+                    hotelDTO.setCancellationTitle(hotel.getCancellationTitle());
+                    hotelDTO.setPaymentDescription(hotel.getPaymentDescription());
+                    hotelDTO.setBreakfastIncludedDescription(hotel.getBreakfastIncludedDescription());
+                    hotelDTO.setHotelImage(hotel.getHotelImage());
+                    hotelDTO.setDiscountAddsTitle(hotel.getDiscountAddsTitle());
+                    hotelDTO.setDiscountAddsDescription(hotel.getDiscountAddsDescription());
+                    hotelDTO.setRoomsDeluxeName(hotel.getRoomsDeluxeName());
+                    hotelDTO.setOrdered(hotel.isOrdered());
+
+                    hotelDTO.setConditionNameOfItemList(
+                            hotel.getHotelsConditionEntityList().stream().map(cond -> {
+                                HotelsConditionDTO condDTO = new HotelsConditionDTO();
+                                condDTO.setConditionName(cond.getConditionNameOfItem());
+                                return condDTO;
+                            }).collect(Collectors.toList())
+
+                    );
+                    System.out.println("Condition size: " + hotel.getHotelsConditionEntityList().size());
+
+                    System.out.println("hotelDTO: " + hotelDTO.getHotelName());
+                    return hotelDTO;
+                }).collect(Collectors.toList())
+        );
+
         return dto;
     }
-
-    private HotelsDetailsDTO toHotelsDetailsDTO(HotelsDetailsEntity entity) {
-        HotelsDetailsDTO dto = new HotelsDetailsDTO();
-        dto.setHotelName(entity.getHotelName());
-        dto.setLocationShortDescription(entity.getLocationShortDescription());
-        dto.setHotelShortDescription(entity.getHotelShortDescription());
-        dto.setRoomShortDescription(entity.getRoomShortDescription());
-        dto.setPriceShortDescription(entity.getPriceShortDescription());
-        dto.setTotalPrice(entity.getTotalPrice());
-        dto.setDiscountPrice(entity.getDiscountPrice());
-        dto.setHotelsShortTitle(entity.getHotelsShortTitle());
-        dto.setCancellationTitle(entity.getCancellationTitle());
-        dto.setPaymentDescription(entity.getPaymentDescription());
-        dto.setBreakfastIncludedDescription(entity.getBreakfastIncludedDescription());
-        dto.setHotelImage(entity.getHotelImage());
-        dto.setDiscountAddsTitle(entity.getDiscountAddsTitle());
-        dto.setDiscountAddsDescription(entity.getDiscountAddsDescription());
-        dto.setRoomsDeluxeName(entity.getRoomsDeluxeName());
-        dto.setOrdered(entity.isOrdered());
-
-        List<HotelsConditionDTO> conditionDTOList = new ArrayList<>();
-        if (entity.getHotelsConditionEntityList() != null) {
-            conditionDTOList = entity.getHotelsConditionEntityList().stream()
-                    .map(this::toConditionDTO)
-                    .collect(Collectors.toList());
-        }
-
-        dto.setConditionNameOfItemList(conditionDTOList);
-        return dto;
-    }
-    private HotelsConditionDTO toConditionDTO(HotelsConditionEntity entity) {
-        HotelsConditionDTO dto = new HotelsConditionDTO();
-        dto.setConditionName(entity.getConditionNameOfItem());
-        return dto;
-    }
-
 
     // GET BY ID
     public PostDTO getHotelsPostById(String hotelsPostId) {
         HotelsEntity getHotelsPostId = getHotelsPostId(hotelsPostId);
         return toInfoDTO(getHotelsPostId);
     }
+
     //UPDATE BY ID
     public PostDTO updateHotelsPost(String hotelsPostId, PostCreatedDTO postCreatedDTO) {
         HotelsEntity hotels = getHotelsPostId(hotelsPostId);
@@ -170,6 +152,7 @@ public class HotelsPostsService {
         }
         return toInfoDTO(hotels);
     }
+
     //DELETE BY ID
     public String deleteHotelsPost(String hotelsPostId) {
         if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE)) {
@@ -177,6 +160,7 @@ public class HotelsPostsService {
         }
         return "Deleted";
     }
+
     // FOR NESTED ENTITY ON CREATE AND UPDATE METHOD
     public PostDTO toInfoDTO(HotelsEntity entity) {
         PostDTO postDTO = new PostDTO();
@@ -224,6 +208,7 @@ public class HotelsPostsService {
         postDTO.setHotelsDetailsDTOList(hotelsDetailsDTOList);
         return postDTO;
     }
+
     // FOR NESTED ENTITY ON CREATE AND UPDATE METHOD
     private static HotelsDetailsEntity getHotelsDetailsEntity(HotelsDetailsDTO dto, HotelsEntity hotels) {
         HotelsDetailsEntity entity = new HotelsDetailsEntity();

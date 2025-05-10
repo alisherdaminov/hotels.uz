@@ -60,7 +60,7 @@ public class UserEntity {
     //main adds
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", insertable = false, updatable = false)
-    private UserEntity userMainAdds;
+    private MainAddsEntity mainAdds;
     //short adds
     @OneToOne(mappedBy = "usersAdverts", fetch = FetchType.LAZY)
     private ShortAdvertsEntity shortAdvertsEntity;
