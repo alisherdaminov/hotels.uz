@@ -2,8 +2,8 @@ package hotels.uz.controller;
 
 import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.created.PostCreatedDTO;
-import hotels.uz.dto.hotels.dto.PostDTO;
-import hotels.uz.service.hotels.HotelsPostsService;
+import hotels.uz.dto.hotels.dto.HotelsPostDTO;
+import hotels.uz.service.hotels.post.HotelsPostsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +24,20 @@ public class HotelsPostController {
 
     @PreAuthorize("hasRole('HOTEL_ROLE')")
     @PostMapping("/create_post/{userId}")
-    public ResponseEntity<ApiResponse<PostDTO>> hotelPost(@Valid @PathVariable("userId") Integer userId,
-                                                          @RequestBody PostCreatedDTO postCreatedDTO) {
+    public ResponseEntity<ApiResponse<HotelsPostDTO>> hotelPost(@Valid @PathVariable("userId") Integer userId,
+                                                                @RequestBody PostCreatedDTO postCreatedDTO) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.createPost(userId, postCreatedDTO)
                 , "Success", new Date()));
     }
 
     @GetMapping("/fetch_posts")
-    public ResponseEntity<ApiResponse<List<PostDTO>>> findAllHotelsPost() {
+    public ResponseEntity<ApiResponse<List<HotelsPostDTO>>> findAllHotelsPost() {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.findAllHotelsPost()
                 , "Success", new Date()));
     }
 
     @GetMapping("/fetch_one_post/{hotelsPostId}")
-    public ResponseEntity<ApiResponse<PostDTO>> findByIdHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId) {
+    public ResponseEntity<ApiResponse<HotelsPostDTO>> findByIdHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.getHotelsPostById(hotelsPostId)
                 , "Success", new Date()));
     }
@@ -45,8 +45,8 @@ public class HotelsPostController {
 
     @PreAuthorize("hasRole('HOTEL_ROLE')")
     @PutMapping("/update_post/{hotelsPostId}")
-    public ResponseEntity<ApiResponse<PostDTO>> updateHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId,
-                                                                 @Valid @RequestBody PostCreatedDTO postCreatedDTO) {
+    public ResponseEntity<ApiResponse<HotelsPostDTO>> updateHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId,
+                                                                       @Valid @RequestBody PostCreatedDTO postCreatedDTO) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.updateHotelsPost(hotelsPostId, postCreatedDTO)
                 , "Success", new Date()));
     }

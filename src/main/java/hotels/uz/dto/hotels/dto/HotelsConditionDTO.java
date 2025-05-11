@@ -10,5 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HotelsConditionDTO {
+    private String conditionId;
     private String conditionName;
 }

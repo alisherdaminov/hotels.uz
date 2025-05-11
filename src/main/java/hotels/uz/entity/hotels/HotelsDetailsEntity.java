@@ -37,8 +37,6 @@ public class HotelsDetailsEntity {
     private String paymentDescription;
     @Column(name = "breakfast_included_title")
     private String breakfastIncludedDescription;
-    @Column(name = "hotel_image")
-    private String hotelImage;
     @Column(name = "is_ordered")
     private boolean isOrdered;
     @Column(name = "discount_adds_title")
@@ -48,12 +46,16 @@ public class HotelsDetailsEntity {
     @Column(name = "rooms_deluxe_name")
     private String roomsDeluxeName;
 
-    @Column(name = "hotel_id")
-    private String hotelId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id", insertable = false, updatable = false)
     private HotelsEntity hotelsEntity;
+
+    @Column(name = "post_images_details_id")
+    private String postImagesDetailsId;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_images_details_id", insertable = false, updatable = false)
+    private List<PostImageEntity> postImage;
 
     @OneToMany(mappedBy = "hotelsDetailsEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotelsConditionEntity> hotelsConditionEntityList = new ArrayList<>();

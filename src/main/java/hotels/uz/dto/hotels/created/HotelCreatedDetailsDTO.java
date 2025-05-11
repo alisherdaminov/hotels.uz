@@ -1,6 +1,7 @@
 package hotels.uz.dto.hotels.created;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -39,7 +40,8 @@ public class HotelCreatedDetailsDTO {
     @NotBlank(message = "Breakfast included description is required")
     @Length(min = 5, max = 70, message = "Breakfast included description must be min-5 to max-70 characters")
     private String breakfastIncludedDescription;
-    private String hotelImage;
+    @NotNull(message = "Photo is required")
+    private PostImageCreatedDTO hotelDetailsImage;
     private boolean isOrdered;
     @NotBlank(message = "Discount adds title is required")
     @Length(min = 5, max = 70, message = "Discount adds title must be min-5 to max-70 characters")

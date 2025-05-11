@@ -28,8 +28,6 @@ public class HotelsEntity {
     private int averagePrice;
     @Column(name = "deals_started")
     private int dealsStarted;
-    @Column(name = "region_image")
-    private String regionImage;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
 
@@ -37,8 +35,15 @@ public class HotelsEntity {
     private Integer userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id",insertable=false, updatable=false)
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private UserEntity userEntity;
+
+    @Column(name = "post_image_id")
+    private String postImageId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_image_id", insertable = false, updatable = false)
+    private PostImageEntity postImage;
 
     @OneToMany(mappedBy = "hotelsEntity", fetch = FetchType.LAZY)
     private List<HotelsDetailsEntity> hotelsDetailsEntityList;

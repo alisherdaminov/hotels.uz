@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HotelsDetailsDTO {
+    private String hotelsDetailsId;
     private String hotelName;
     private String locationShortDescription;
     private String hotelShortDescription;
@@ -20,7 +21,7 @@ public class HotelsDetailsDTO {
     private String cancellationTitle;
     private String paymentDescription;
     private String breakfastIncludedDescription;
-    private String hotelImage;
+    private PostImageDTO hotelImage;
     private String discountAddsTitle;
     private String discountAddsDescription;
     private String roomsDeluxeName;

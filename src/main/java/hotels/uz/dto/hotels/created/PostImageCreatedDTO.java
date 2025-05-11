@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MainAddsCreatedDTO {
+public class PostImageCreatedDTO {
     @NotBlank(message = "Id is required")
-    private String mainAddsCreatedId;
+    private String postImageCreatedId;
 }
