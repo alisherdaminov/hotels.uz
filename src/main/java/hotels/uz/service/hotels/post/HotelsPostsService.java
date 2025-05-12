@@ -13,6 +13,7 @@ import hotels.uz.repository.auth.UserRepository;
 import hotels.uz.repository.hotels.HotelDetailsRepository;
 import hotels.uz.repository.hotels.HotelsConditionRepository;
 import hotels.uz.repository.hotels.HotelsRepository;
+import hotels.uz.service.hotels.likes.UserLikesService;
 import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ public class HotelsPostsService {
     private UserRepository userRepository;
     @Autowired
     private PostImageService postImageService;
+    @Autowired
+    private UserLikesService userLikesService;
 
     //GET BY ID of hotels post
     public HotelsEntity getHotelsPostId(String hotelsPostId) {
@@ -229,12 +232,14 @@ public class HotelsPostsService {
                 hotelDTO.setCancellationTitle(hotel.getCancellationTitle());
                 hotelDTO.setPaymentDescription(hotel.getPaymentDescription());
                 hotelDTO.setBreakfastIncludedDescription(hotel.getBreakfastIncludedDescription());
+
                 if (hotel.getPostImagesDetailsId() != null) {
                     hotelDTO.setHotelImage(postImageService.postImageDTO(hotel.getPostImagesDetailsId()));
                 }
                 hotelDTO.setDiscountAddsTitle(hotel.getDiscountAddsTitle());
                 hotelDTO.setDiscountAddsDescription(hotel.getDiscountAddsDescription());
                 hotelDTO.setRoomsDeluxeName(hotel.getRoomsDeluxeName());
+                hotelDTO.setUserLikes(userLikesService.isLiked(hotel.getHotelsDetailsId(), SpringSecurityUtil.getCurrentUserId()));
                 hotelDTO.setOrdered(hotel.isOrdered());
 
                 List<HotelsConditionDTO> conditionDTOList = new ArrayList<>();

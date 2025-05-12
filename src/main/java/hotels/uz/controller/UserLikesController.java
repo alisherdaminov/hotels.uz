@@ -1,10 +1,15 @@
 package hotels.uz.controller;
 
+import hotels.uz.dto.Auth.ApiResponse;
+import hotels.uz.dto.hotels.dto.likes.UserLikesDTO;
 import hotels.uz.service.hotels.likes.UserLikesService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/like")
@@ -15,13 +20,24 @@ public class UserLikesController {
     private UserLikesService userLikesService;
 
     @PostMapping("/isLiked/{postId}/{userId}")
-    public ResponseEntity<String> isLiked(@PathVariable String postId, @PathVariable Integer userId) {
-        boolean isLiked = userLikesService.isLiked(postId, userId);
-        return ResponseEntity.ok(isLiked ? "Post liked" : "Post unliked");
+    public ResponseEntity<ApiResponse<UserLikesDTO>> isLiked(@PathVariable("postId") String postId,
+                                                             @PathVariable("userId") Integer userId) {
+        UserLikesDTO isLiked = userLikesService.isLiked(postId, userId);
+        String message = isLiked.isLiked() ? "Liked" : "Unliked";
+        ApiResponse<UserLikesDTO> response = new ApiResponse(message, "Success", new Date());
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/likes_counts")
+    public ResponseEntity<ApiResponse<List<UserLikesDTO>>> getLikesAllCounts() {
+        return ResponseEntity.ok(new ApiResponse<>(userLikesService.findAllLikes(),
+                "Success", new Date()));
     }
 
     @GetMapping("/count/{postId}")
-    public ResponseEntity<Long> getLikesCount(@PathVariable String postId) {
-        return ResponseEntity.ok(userLikesService.getLikeCount(postId));
+    public ResponseEntity<ApiResponse<Long>> getLikesCount(@PathVariable String postId) {
+        return ResponseEntity.ok().body(new ApiResponse<>(userLikesService.getLikeCount(postId),
+                "Success", new Date()));
     }
 }
