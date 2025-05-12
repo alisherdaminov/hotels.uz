@@ -85,7 +85,7 @@ public class HotelsPostsService {
     // GET BY ID
     public HotelsPostDTO getHotelsPostById(String hotelsPostId) {
         HotelsEntity getHotelsPostId = getHotelsPostId(hotelsPostId);
-        return toDTO(getHotelsPostId);
+        return mapToDTO(getHotelsPostId);
     }
 
     //UPDATE BY ID

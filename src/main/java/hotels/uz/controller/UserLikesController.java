@@ -28,16 +28,9 @@ public class UserLikesController {
         return ResponseEntity.ok(response);
     }
 
-
-    @GetMapping("/likes_counts")
+    @GetMapping("/counts")
     public ResponseEntity<ApiResponse<List<UserLikesDTO>>> getLikesAllCounts() {
         return ResponseEntity.ok(new ApiResponse<>(userLikesService.findAllLikes(),
-                "Success", new Date()));
-    }
-
-    @GetMapping("/count/{postId}")
-    public ResponseEntity<ApiResponse<Long>> getLikesCount(@PathVariable String postId) {
-        return ResponseEntity.ok().body(new ApiResponse<>(userLikesService.getLikeCount(postId),
                 "Success", new Date()));
     }
 }

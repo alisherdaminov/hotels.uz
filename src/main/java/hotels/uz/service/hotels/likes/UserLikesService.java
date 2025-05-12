@@ -1,6 +1,5 @@
 package hotels.uz.service.hotels.likes;
 
-import hotels.uz.dto.hotels.created.likes.UserLikesCreateDTO;
 import hotels.uz.dto.hotels.dto.likes.UserLikesDTO;
 import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.entity.hotels.HotelsDetailsEntity;
@@ -26,12 +25,8 @@ public class UserLikesService {
     private UserRepository userRepository;
 
     public UserLikesDTO isLiked(String postId, Integer userId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        HotelsDetailsEntity post = hotelDetailsRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        HotelsDetailsEntity post = hotelDetailsRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         Optional<UserLikes> optionalLike = userLikesRepository.findByUserAndHotel(user, post);
 
         UserLikes like;
@@ -45,29 +40,13 @@ public class UserLikesService {
             like.setLiked(true);
             like.setUserId(userId);
         }
-
         userLikesRepository.save(like);
         return toDTO(like);
     }
 
-
     public List<UserLikesDTO> findAllLikes() {
         List<UserLikes> userLikes = userLikesRepository.findAllLikes();
         return userLikes.stream().map(this::toDTO).collect(Collectors.toList());
-    }
-
-    public long getLikeCount(String postId) {
-        HotelsDetailsEntity hotelDetailsEntity = hotelDetailsRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-        return userLikesRepository.countLikes(hotelDetailsEntity);
-    }
-
-    public UserLikes toEntity(UserLikesCreateDTO dto, UserEntity user, HotelsDetailsEntity post) {
-        UserLikes entity = new UserLikes();
-        entity.setLiked(dto.isLiked());
-        entity.setUserId(dto.getUserId());
-        entity.setUserLikes(user);
-        entity.setHotelsDetailsPosts(post);
-        return entity;
     }
 
     public UserLikesDTO toDTO(UserLikes entity) {
