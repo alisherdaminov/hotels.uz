@@ -3,6 +3,8 @@ package hotels.uz.dto.hotels.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,7 +27,8 @@ public class HotelsDetailsDTO {
     private String discountAddsTitle;
     private String discountAddsDescription;
     private String roomsDeluxeName;
-    private List<HotelsConditionDTO> conditionNameOfItemList;
+    private HotelsPostDTO hotelsPostDTO;
+    private List<HotelsConditionDTO> conditionNameOfItemList=new ArrayList<>();
     private boolean ordered;
 }
 

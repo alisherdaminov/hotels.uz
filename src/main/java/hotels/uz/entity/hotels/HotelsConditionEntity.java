@@ -15,10 +15,11 @@ public class HotelsConditionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String hotelsConditionId;
+
     @Column(name = "condition_name_of_item")
     private String conditionNameOfItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_details_id", nullable = false)
+    @JoinColumn(name = "hotel_details_id")
     private HotelsDetailsEntity hotelsDetailsEntity;
 }

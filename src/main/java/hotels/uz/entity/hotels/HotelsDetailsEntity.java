@@ -3,6 +3,7 @@ package hotels.uz.entity.hotels;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +47,13 @@ public class HotelsDetailsEntity {
     @Column(name = "rooms_deluxe_name")
     private String roomsDeluxeName;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", insertable = false, updatable = false)
+    @JoinColumn(name = "hotel_id")
     private HotelsEntity hotelsEntity;
+
+    @OneToMany(mappedBy = "hotelsDetailsEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotelsConditionEntity> hotelsConditionEntityList;
 
     @Column(name = "post_images_details_id")
     private String postImagesDetailsId;
@@ -57,6 +62,4 @@ public class HotelsDetailsEntity {
     @JoinColumn(name = "post_images_details_id", insertable = false, updatable = false)
     private List<PostImageEntity> postImage;
 
-    @OneToMany(mappedBy = "hotelsDetailsEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HotelsConditionEntity> hotelsConditionEntityList = new ArrayList<>();
 }

@@ -16,6 +16,7 @@ public interface HotelsRepository extends JpaRepository<HotelsEntity, String> {
     @Query("SELECT h FROM HotelsEntity h LEFT JOIN FETCH h.hotelsDetailsEntityList")
     List<HotelsEntity> findAllWithDetails();
 
+
     @Query("SELECT h FROM HotelsEntity h LEFT JOIN FETCH h.hotelsDetailsEntityList WHERE h.hotelsId = :id")
     Optional<HotelsEntity> findByIdWithDetails(@Param("id") String id);
 }

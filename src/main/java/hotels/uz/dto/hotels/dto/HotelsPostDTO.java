@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,6 +19,6 @@ public class HotelsPostDTO {
     private Integer averagePrice;
     private Integer dealsStarted;
     private PostImageDTO regionImage;
-    private List<HotelsDetailsDTO> hotelsDetailsList;
+    private List<HotelsDetailsDTO> hotelsDetailsList=new ArrayList<>();
     private LocalDateTime createdDate;
 }

@@ -38,6 +38,9 @@ public class HotelsEntity {
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private UserEntity userEntity;
 
+    @OneToMany(mappedBy = "hotelsEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotelsDetailsEntity> hotelsDetailsEntityList;
+
     @Column(name = "post_image_id")
     private String postImageId;
 
@@ -45,6 +48,4 @@ public class HotelsEntity {
     @JoinColumn(name = "post_image_id", insertable = false, updatable = false)
     private PostImageEntity postImage;
 
-    @OneToMany(mappedBy = "hotelsEntity", fetch = FetchType.LAZY)
-    private List<HotelsDetailsEntity> hotelsDetailsEntityList;
 }
