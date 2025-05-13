@@ -1,7 +1,7 @@
 package hotels.uz.service.hotels.post;
 
-import hotels.uz.dto.hotels.created.BookingCreatedDTO;
 import hotels.uz.dto.hotels.created.PostCreatedDTO;
+import hotels.uz.dto.hotels.created.QueryCreatedDTO;
 import hotels.uz.dto.hotels.dto.HotelsConditionDTO;
 import hotels.uz.dto.hotels.dto.HotelsDetailsDTO;
 import hotels.uz.dto.hotels.dto.HotelsPostDTO;
@@ -41,12 +41,19 @@ public class HotelsPostsService {
     @Autowired
     private BookingService bookingService;
 
+
+    //GET BY QUERY
+    public List<HotelsPostDTO> findHotelsByQuery(QueryCreatedDTO queryCreatedDTO) {
+        List<HotelsEntity> query = hotelsRepository.findHotelsByQuery(queryCreatedDTO.getQuery());
+        return query.stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
     //GET BY ID of hotels post
     public HotelsEntity getHotelsPostId(String hotelsPostId) {
         return hotelsRepository.findById(hotelsPostId).orElseThrow(() -> new AppBadException("Post not found: " + hotelsPostId));
     }
 
-
+    //CREATE
     public HotelsPostDTO createPost(Integer userId, PostCreatedDTO postCreatedDTO) {
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
         if (SpringSecurityUtil.hasRole(ProfileRole.USER_ROLE) && !userId.equals(currentUserId)) {
@@ -77,6 +84,7 @@ public class HotelsPostsService {
         throw new AppBadException("Unauthorized attempt to create post");
     }
 
+    //GET
     public List<HotelsPostDTO> findAllHotelsPost() {
         List<HotelsEntity> hotelsEntityList = hotelsRepository.findAllWithDetails();
         return hotelsEntityList.stream()

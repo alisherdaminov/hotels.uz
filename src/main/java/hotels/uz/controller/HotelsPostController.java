@@ -2,6 +2,7 @@ package hotels.uz.controller;
 
 import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.created.PostCreatedDTO;
+import hotels.uz.dto.hotels.created.QueryCreatedDTO;
 import hotels.uz.dto.hotels.dto.HotelsPostDTO;
 import hotels.uz.service.hotels.post.HotelsPostsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +22,12 @@ public class HotelsPostController {
 
     @Autowired
     private HotelsPostsService hotelsPostService;
+
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse<List<HotelsPostDTO>>> findHotelsByQuery(@RequestBody QueryCreatedDTO queryCreatedDTO) {
+        return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.findHotelsByQuery(queryCreatedDTO)
+                , "Success", new Date()));
+    }
 
     @PreAuthorize("hasRole('HOTEL_ROLE')")
     @PostMapping("/create_post/{userId}")
