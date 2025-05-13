@@ -2,7 +2,6 @@ package hotels.uz.dto.hotels.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hotels.uz.dto.hotels.dto.likes.UserLikesDTO;
-import hotels.uz.entity.hotels.likes.UserLikes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +30,7 @@ public class HotelsDetailsDTO {
     private String roomsDeluxeName;
     private UserLikesDTO userLikes;
     private HotelsPostDTO hotelsPostDTO;
+    private List<BookingDTO> bookingList;
     private List<HotelsConditionDTO> conditionNameOfItemList = new ArrayList<>();
     private boolean ordered;
 }

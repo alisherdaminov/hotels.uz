@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -47,13 +47,15 @@ public class HotelsDetailsEntity {
     @Column(name = "rooms_deluxe_name")
     private String roomsDeluxeName;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     private HotelsEntity hotelsEntity;
 
     @OneToMany(mappedBy = "hotelsDetailsEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotelsConditionEntity> hotelsConditionEntityList;
+
+    @OneToMany(mappedBy = "hotelsDetailsEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookingEntity> bookingEntityList;
 
     @Column(name = "post_images_details_id")
     private String postImagesDetailsId;

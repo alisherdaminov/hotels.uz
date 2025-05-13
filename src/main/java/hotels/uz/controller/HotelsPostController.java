@@ -42,6 +42,12 @@ public class HotelsPostController {
                 , "Success", new Date()));
     }
 
+    @GetMapping("/fetch_one_details_post/{hotelDetailsPostId}")
+    public ResponseEntity<ApiResponse<HotelsPostDTO>> getHotelsDetailsPostById(@PathVariable("hotelDetailsPostId") String hotelsPostId) {
+        return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.getHotelsDetailsPostById(hotelsPostId)
+                , "Success", new Date()));
+    }
+
 
     @PreAuthorize("hasRole('HOTEL_ROLE')")
     @PutMapping("/update_post/{hotelsPostId}")

@@ -1,5 +1,6 @@
 package hotels.uz.service.hotels.post;
 
+import hotels.uz.dto.hotels.created.BookingCreatedDTO;
 import hotels.uz.dto.hotels.created.PostCreatedDTO;
 import hotels.uz.dto.hotels.dto.HotelsConditionDTO;
 import hotels.uz.dto.hotels.dto.HotelsDetailsDTO;
@@ -37,6 +38,8 @@ public class HotelsPostsService {
     private PostImageService postImageService;
     @Autowired
     private UserLikesService userLikesService;
+    @Autowired
+    private BookingService bookingService;
 
     //GET BY ID of hotels post
     public HotelsEntity getHotelsPostId(String hotelsPostId) {
@@ -61,7 +64,6 @@ public class HotelsPostsService {
 //                hotels.setPostImageId(postCreatedDTO.getRegionImage().getPostImageCreatedId());
 //            }
             HotelsEntity savedHotel = hotelsRepository.save(hotels);
-
             List<HotelsDetailsEntity> detailsList = new ArrayList<>();
             if (postCreatedDTO.getHotelsDetailsDTOList() != null) {
                 detailsList = postCreatedDTO.getHotelsDetailsDTOList().stream()
@@ -86,6 +88,12 @@ public class HotelsPostsService {
     public HotelsPostDTO getHotelsPostById(String hotelsPostId) {
         HotelsEntity getHotelsPostId = getHotelsPostId(hotelsPostId);
         return mapToDTO(getHotelsPostId);
+    }
+
+    // GET BY ID
+    public HotelsPostDTO getHotelsDetailsPostById(String hotelsPostId) {
+        HotelsDetailsEntity entity = hotelsDetailsRepository.findById(hotelsPostId).orElseThrow(() -> new AppBadException("Post not found: " + hotelsPostId));
+        return mapToDTO(entity.getHotelsEntity());
     }
 
     //UPDATE BY ID
@@ -232,6 +240,7 @@ public class HotelsPostsService {
                 hotelDTO.setCancellationTitle(hotel.getCancellationTitle());
                 hotelDTO.setPaymentDescription(hotel.getPaymentDescription());
                 hotelDTO.setBreakfastIncludedDescription(hotel.getBreakfastIncludedDescription());
+                hotelDTO.setBookingList(bookingService.getBookingsByUserAndHotel(SpringSecurityUtil.getCurrentUserId(), hotel.getHotelsDetailsId()));
 
                 if (hotel.getPostImagesDetailsId() != null) {
                     hotelDTO.setHotelImage(postImageService.postImageDTO(hotel.getPostImagesDetailsId()));
