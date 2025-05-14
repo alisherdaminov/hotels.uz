@@ -1,14 +1,11 @@
 package hotels.uz.dto.hotels.created;
 
-import hotels.uz.dto.hotels.dto.HotelsDetailsDTO;
-import hotels.uz.entity.hotels.PostImageEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -27,7 +24,8 @@ public class PostCreatedDTO {
     private int averagePrice;
     @NotNull(message = "Deals started price is required")
     private int dealsStarted;
-    //@NotNull(message = "Region image is required")
-    private PostImageCreatedDTO regionImage;
-    private List<HotelsDetailsDTO> hotelsDetailsDTOList;
+    @NotNull(message = "Region image is required")
+    private PostRegionImageCreatedDTO regionImage;
+    private HotelDetailsCreatedDTO hotelCreatedDetailsDTO;
+    private List<HotelDetailsCreatedDTO> hotelsDetailsDTOList;
 }

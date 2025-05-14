@@ -2,8 +2,6 @@ package hotels.uz.dto.hotels.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ public class HotelsPostDTO {
     private String description;
     private Integer averagePrice;
     private Integer dealsStarted;
-    private PostImageDTO regionImage;
+    private PostRegionImageDTO regionImage;
     private List<HotelsDetailsDTO> hotelsDetailsList=new ArrayList<>();
     private LocalDateTime createdDate;
 }

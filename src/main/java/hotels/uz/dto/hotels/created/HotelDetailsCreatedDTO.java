@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class HotelCreatedDetailsDTO {
+public class HotelDetailsCreatedDTO {
     @NotBlank(message = "Hotel name is required")
     @Length(min = 5, max = 70, message = "Hotel name must be min-5 to max-70 characters")
     private String hotelName;
@@ -42,7 +42,7 @@ public class HotelCreatedDetailsDTO {
     @Length(min = 5, max = 70, message = "Breakfast included description must be min-5 to max-70 characters")
     private String breakfastIncludedDescription;
     @NotNull(message = "Photo is required")
-    private PostImageCreatedDTO hotelDetailsImage;
+    private PostRegionImageCreatedDTO hotelDetailsImage;
     private boolean isOrdered;
     @NotBlank(message = "Discount adds title is required")
     @Length(min = 5, max = 70, message = "Discount adds title must be min-5 to max-70 characters")
@@ -53,5 +53,6 @@ public class HotelCreatedDetailsDTO {
     @NotBlank(message = "Rooms deluxe name is required")
     @Length(min = 5, max = 70, message = "Rooms deluxe name must be min-5 to max-70 characters")
     private String roomsDeluxeName;
-    private List<HotelsCreatedConditionDTO> conditionNameOfItemDTOList;
+    private PostHotelDetailsImageCreatedDTO postHotelDetailsImageCreatedDTO;
+    private List<HotelsCreatedConditionDTO> conditionNameOfItemDTOList= new ArrayList<>();
 }

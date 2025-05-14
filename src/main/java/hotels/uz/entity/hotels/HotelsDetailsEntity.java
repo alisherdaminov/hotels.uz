@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -58,10 +57,10 @@ public class HotelsDetailsEntity {
     private List<BookingEntity> bookingEntityList;
 
     @Column(name = "post_images_details_id")
-    private String postImagesDetailsId;
+    private String hotelsDetailsImageId;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_images_details_id", insertable = false, updatable = false)
-    private List<PostImageEntity> postImage;
+    private PostImageEntity postImage;
 
 }

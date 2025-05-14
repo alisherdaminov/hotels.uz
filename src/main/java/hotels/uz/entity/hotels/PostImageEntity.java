@@ -25,9 +25,8 @@ public class PostImageEntity {
     private String originalName;
     @Column(name = "size")
     private Long size;
-    @Column(name = "image")
-    private String image;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
+
 
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PostImageCreatedDTO {
+public class PostRegionImageCreatedDTO {
     @NotBlank(message = "Id is required")
-    private String postImageCreatedId;
+    private String postRegionImageCreatedId;
 }

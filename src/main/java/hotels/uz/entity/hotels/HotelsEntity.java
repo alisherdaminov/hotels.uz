@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,7 +41,7 @@ public class HotelsEntity {
     private List<HotelsDetailsEntity> hotelsDetailsEntityList;
 
     @Column(name = "post_image_id")
-    private String postImageId;
+    private String hotelsRegionImageId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_image_id", insertable = false, updatable = false)

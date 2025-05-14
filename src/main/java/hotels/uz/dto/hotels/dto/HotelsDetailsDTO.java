@@ -24,12 +24,11 @@ public class HotelsDetailsDTO {
     private String cancellationTitle;
     private String paymentDescription;
     private String breakfastIncludedDescription;
-    private PostImageDTO hotelImage;
     private String discountAddsTitle;
     private String discountAddsDescription;
     private String roomsDeluxeName;
+    private PostHotelDetailsImageDTO hotelPostImageId;
     private UserLikesDTO userLikes;
-    private HotelsPostDTO hotelsPostDTO;
     private List<BookingDTO> bookingList;
     private List<HotelsConditionDTO> conditionNameOfItemList = new ArrayList<>();
     private boolean ordered;
