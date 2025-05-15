@@ -1,8 +1,7 @@
 package hotels.uz.repository.hotels.likes;
 
-import hotels.uz.dto.hotels.dto.likes.UserLikesDTO;
 import hotels.uz.entity.auth.UserEntity;
-import hotels.uz.entity.hotels.HotelsDetailsEntity;
+import hotels.uz.entity.hotels.post.HotelsDetailsEntity;
 import hotels.uz.entity.hotels.likes.UserLikes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

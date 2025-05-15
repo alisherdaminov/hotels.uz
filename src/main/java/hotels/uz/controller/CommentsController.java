@@ -1,9 +1,9 @@
 package hotels.uz.controller;
 
 import hotels.uz.dto.Auth.ApiResponse;
-import hotels.uz.dto.hotels.created.CommentsCreatedDTO;
-import hotels.uz.dto.hotels.dto.CommentsDTO;
-import hotels.uz.service.hotels.CommentsService;
+import hotels.uz.dto.hotels.created.hotel.post.CommentsCreatedDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.CommentsDTO;
+import hotels.uz.service.hotels.post.CommentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +41,7 @@ public class CommentsController {
                 "Success", new Date()));
     }
 
-    @PreAuthorize("hasRole(ADMIN_ROLE)")
+    @PreAuthorize("hasRole(ROLE_ADMIN)")
     @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<ApiResponse<String>> deleteComment(@PathVariable("commentId") String commentId) {
         return ResponseEntity.ok().body(new ApiResponse<>(commentsService.deleteComment(commentId),

@@ -1,11 +1,11 @@
 package hotels.uz.service.hotels.post;
 
-import hotels.uz.dto.hotels.dto.PostHotelDetailsImageDTO;
-import hotels.uz.dto.hotels.dto.PostRegionImageDTO;
-import hotels.uz.entity.hotels.PostImageEntity;
+import hotels.uz.dto.hotels.dto.hotel.post.PostHotelDetailsImageDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.PostRegionImageDTO;
+import hotels.uz.entity.hotels.post.PostImageEntity;
 import hotels.uz.enums.ProfileRole;
 import hotels.uz.exceptions.AppBadException;
-import hotels.uz.repository.hotels.PostImageRepository;
+import hotels.uz.repository.hotels.post.PostImageRepository;
 import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class PostImageService {
     private String url;
 
     public PostRegionImageDTO uploadRegionImage(MultipartFile file, Integer userId) {
-        if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE) &&
+        if (SpringSecurityUtil.hasRole(ProfileRole.ROLE_HOTEL) &&
                 userId.equals(SpringSecurityUtil.getCurrentUserId())) {
             if (file.isEmpty()) {
                 throw new AppBadException("Photo is not found!");
@@ -90,7 +90,7 @@ public class PostImageService {
     }
 
     public PostRegionImageDTO uploadHotelDetailsImage(MultipartFile file, Integer userId) {
-        if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE) &&
+        if (SpringSecurityUtil.hasRole(ProfileRole.ROLE_HOTEL) &&
                 userId.equals(SpringSecurityUtil.getCurrentUserId())) {
             if (file.isEmpty()) {
                 throw new AppBadException("Photo is not found!");

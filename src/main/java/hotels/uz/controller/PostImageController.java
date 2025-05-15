@@ -1,7 +1,7 @@
 package hotels.uz.controller;
 
 import hotels.uz.dto.Auth.ApiResponse;
-import hotels.uz.dto.hotels.dto.PostRegionImageDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.PostRegionImageDTO;
 import hotels.uz.service.hotels.post.PostImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

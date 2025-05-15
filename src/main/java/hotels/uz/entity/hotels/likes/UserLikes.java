@@ -1,7 +1,7 @@
 package hotels.uz.entity.hotels.likes;
 
 import hotels.uz.entity.auth.UserEntity;
-import hotels.uz.entity.hotels.HotelsDetailsEntity;
+import hotels.uz.entity.hotels.post.HotelsDetailsEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

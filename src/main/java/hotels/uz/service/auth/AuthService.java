@@ -33,10 +33,26 @@ public class AuthService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public ApiResponse<String> adminRegistration(CreatedUserDTO dto, AppLanguage language) {
+        Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
+        if (optional.isPresent()) {
+            return new ApiResponse<>("Admin exists");
+        }
+        UserEntity entity = new UserEntity();
+        entity.setFirstName(dto.getFirstName());
+        entity.setPhoneNumber(dto.getPhoneNumber());
+        entity.setUsername(dto.getUsername());
+        entity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        entity.setCreatedDate(LocalDateTime.now());
+        authRepository.save(entity);
+        roleService.createRole(entity.getProfileUserId(), ProfileRole.ROLE_ADMIN);
+        return new ApiResponse<>("Admin successfully registered");
+    }
+
     public ApiResponse<String> userRegistration(CreatedUserDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
-            return new ApiResponse<>("user.exists");
+            return new ApiResponse<>("User exists");
         }
         UserEntity entity = new UserEntity();
         entity.setFirstName(dto.getFirstName());
@@ -47,14 +63,14 @@ public class AuthService {
         entity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         entity.setCreatedDate(LocalDateTime.now());
         authRepository.save(entity);
-        roleService.createRole(entity.getProfileUserId(), ProfileRole.USER_ROLE);
+        roleService.createRole(entity.getProfileUserId(), ProfileRole.ROLE_USER);
         return new ApiResponse<>("User successfully registered");
     }
 
     public ApiResponse<String> hotelRegistration(CreatedUserDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
-            return new ApiResponse<>("user.exists");
+            return new ApiResponse<>("Hotel exists");
         }
         UserEntity entity = new UserEntity();
         entity.setFirstName(dto.getFirstName());
@@ -71,7 +87,7 @@ public class AuthService {
         entity.setHasParking(dto.getHasParking());
         entity.setCreatedDate(LocalDateTime.now());
         authRepository.save(entity);
-        roleService.createRole(entity.getProfileUserId(), ProfileRole.HOTEL_ROLE);
+        roleService.createRole(entity.getProfileUserId(), ProfileRole.ROLE_HOTEL);
         return new ApiResponse<>("Hotel successfully registered");
     }
 

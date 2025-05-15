@@ -2,8 +2,8 @@ package hotels.uz.enums;
 
 
 public enum ProfileRole {
-    USER_ROLE,
-    HOTEL_ROLE,
-    ADMIN_ROLE;
+    ROLE_USER,
+    ROLE_HOTEL,
+    ROLE_ADMIN;
 
 }

@@ -2,10 +2,10 @@ package hotels.uz.service.hotels.likes;
 
 import hotels.uz.dto.hotels.dto.likes.UserLikesDTO;
 import hotels.uz.entity.auth.UserEntity;
-import hotels.uz.entity.hotels.HotelsDetailsEntity;
+import hotels.uz.entity.hotels.post.HotelsDetailsEntity;
 import hotels.uz.entity.hotels.likes.UserLikes;
 import hotels.uz.repository.auth.UserRepository;
-import hotels.uz.repository.hotels.HotelDetailsRepository;
+import hotels.uz.repository.hotels.post.HotelDetailsRepository;
 import hotels.uz.repository.hotels.likes.UserLikesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

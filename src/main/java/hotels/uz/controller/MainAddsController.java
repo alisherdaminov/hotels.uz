@@ -1,8 +1,8 @@
 package hotels.uz.controller;
 
 import hotels.uz.dto.Auth.ApiResponse;
-import hotels.uz.dto.hotels.dto.MainAddsDTO;
-import hotels.uz.service.hotels.MainAddsService;
+import hotels.uz.dto.hotels.dto.hotel.adverts.MainAddsDTO;
+import hotels.uz.service.hotels.adverts.MainAddsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;

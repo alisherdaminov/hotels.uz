@@ -1,20 +1,23 @@
 
 package hotels.uz.service.hotels.post;
 
-import hotels.uz.dto.hotels.created.*;
-import hotels.uz.dto.hotels.dto.HotelsConditionDTO;
-import hotels.uz.dto.hotels.dto.HotelsDetailsDTO;
-import hotels.uz.dto.hotels.dto.HotelsPostDTO;
-import hotels.uz.entity.hotels.HotelsConditionEntity;
-import hotels.uz.entity.hotels.HotelsDetailsEntity;
-import hotels.uz.entity.hotels.HotelsEntity;
+import hotels.uz.dto.hotels.created.hotel.post.HotelDetailsCreatedDTO;
+import hotels.uz.dto.hotels.created.hotel.post.HotelsCreatedConditionDTO;
+import hotels.uz.dto.hotels.created.hotel.post.PostCreatedDTO;
+import hotels.uz.dto.hotels.created.hotel.post.QueryCreatedDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.HotelsConditionDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.HotelsDetailsDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.HotelsPostDTO;
+import hotels.uz.entity.hotels.post.HotelsConditionEntity;
+import hotels.uz.entity.hotels.post.HotelsDetailsEntity;
+import hotels.uz.entity.hotels.post.HotelsEntity;
 import hotels.uz.enums.ProfileRole;
 import hotels.uz.exceptions.AppBadException;
 import hotels.uz.repository.auth.UserRepository;
-import hotels.uz.repository.hotels.HotelDetailsRepository;
-import hotels.uz.repository.hotels.HotelsConditionRepository;
-import hotels.uz.repository.hotels.HotelsRepository;
-import hotels.uz.repository.hotels.PostImageRepository;
+import hotels.uz.repository.hotels.post.HotelDetailsRepository;
+import hotels.uz.repository.hotels.post.HotelsConditionRepository;
+import hotels.uz.repository.hotels.post.HotelsRepository;
+import hotels.uz.repository.hotels.post.PostImageRepository;
 import hotels.uz.service.hotels.likes.UserLikesService;
 import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +62,10 @@ public class HotelsPostsService {
     //CREATE
     public HotelsPostDTO createPost(Integer userId, PostCreatedDTO postCreatedDTO) {
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
-        if (SpringSecurityUtil.hasRole(ProfileRole.USER_ROLE) && !userId.equals(currentUserId)) {
+        if (SpringSecurityUtil.hasRole(ProfileRole.ROLE_USER) && !userId.equals(currentUserId)) {
             throw new AppBadException("You do not have any permission to create this post");
         }
-        if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE) && userId.equals(currentUserId)) {
+        if (SpringSecurityUtil.hasRole(ProfileRole.ROLE_HOTEL) && userId.equals(currentUserId)) {
             HotelsEntity hotels = new HotelsEntity();
             hotels.setRegionName(postCreatedDTO.getRegionName());
             hotels.setProperties(postCreatedDTO.getProperties());
@@ -110,7 +113,7 @@ public class HotelsPostsService {
     public HotelsPostDTO updateHotelsPost(String hotelsPostId, PostCreatedDTO postCreatedDTO) {
         HotelsEntity hotels = getHotelsPostId(hotelsPostId);
         Integer userId = SpringSecurityUtil.getCurrentUserId();
-        if (!SpringSecurityUtil.hasRole(ProfileRole.USER_ROLE) && !hotels.getUserId().equals(userId)) {
+        if (!SpringSecurityUtil.hasRole(ProfileRole.ROLE_USER) && !hotels.getUserId().equals(userId)) {
             throw new AppBadException("You do not have permission to update this post");
         }
         String oldImage = null;
@@ -139,7 +142,7 @@ public class HotelsPostsService {
 
     //DELETE BY ID
     public String deleteHotelsPost(String hotelsPostId) {
-        if (SpringSecurityUtil.hasRole(ProfileRole.HOTEL_ROLE)) {
+        if (SpringSecurityUtil.hasRole(ProfileRole.ROLE_HOTEL)) {
             hotelsRepository.delete(getHotelsPostId(hotelsPostId));
         }
         return "Deleted";

@@ -1,14 +1,13 @@
 package hotels.uz.service.hotels.post;
 
-import hotels.uz.dto.hotels.created.BookingCreatedDTO;
-import hotels.uz.dto.hotels.dto.BookingDTO;
+import hotels.uz.dto.hotels.created.hotel.post.BookingCreatedDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.BookingDTO;
 import hotels.uz.entity.auth.UserEntity;
-import hotels.uz.entity.hotels.BookingEntity;
-import hotels.uz.entity.hotels.HotelsDetailsEntity;
+import hotels.uz.entity.hotels.post.BookingEntity;
+import hotels.uz.entity.hotels.post.HotelsDetailsEntity;
 import hotels.uz.repository.auth.UserRepository;
-import hotels.uz.repository.hotels.BookingRepository;
-import hotels.uz.repository.hotels.HotelDetailsRepository;
-import hotels.uz.repository.hotels.HotelsRepository;
+import hotels.uz.repository.hotels.post.BookingRepository;
+import hotels.uz.repository.hotels.post.HotelDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

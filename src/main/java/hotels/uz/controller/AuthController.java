@@ -18,24 +18,31 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @PostMapping("/admin/registration")
+    public ResponseEntity<ApiResponse<String>> adminRegistration(@Valid
+                                                                 @RequestBody CreatedUserDTO createdUserDTO,
+                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
+        return ResponseEntity.ok().body(authService.adminRegistration(createdUserDTO, language));
+    }
+
+
     @PostMapping("/user/registration")
     public ResponseEntity<ApiResponse<String>> userRegistration(@Valid
-                                                                    @RequestBody CreatedUserDTO createdUserDTO,
+                                                                @RequestBody CreatedUserDTO createdUserDTO,
                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.userRegistration(createdUserDTO, language));
     }
 
-
     @PostMapping("/hotel/registration")
     public ResponseEntity<ApiResponse<String>> hotelRegistration(@Valid
-                                                                     @RequestBody CreatedUserDTO createdUserDTO,
+                                                                 @RequestBody CreatedUserDTO createdUserDTO,
                                                                  @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.hotelRegistration(createdUserDTO, language));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<ResponseDTO>> login(@Valid
-                                                              @RequestBody LoginDTO loginDTO,
+                                                          @RequestBody LoginDTO loginDTO,
                                                           @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.login(loginDTO, language));
     }

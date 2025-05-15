@@ -1,9 +1,9 @@
 package hotels.uz.controller;
 
 import hotels.uz.dto.Auth.ApiResponse;
-import hotels.uz.dto.hotels.created.PostCreatedDTO;
-import hotels.uz.dto.hotels.created.QueryCreatedDTO;
-import hotels.uz.dto.hotels.dto.HotelsPostDTO;
+import hotels.uz.dto.hotels.created.hotel.post.PostCreatedDTO;
+import hotels.uz.dto.hotels.created.hotel.post.QueryCreatedDTO;
+import hotels.uz.dto.hotels.dto.hotel.post.HotelsPostDTO;
 import hotels.uz.service.hotels.post.HotelsPostsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ public class HotelsPostController {
                 , "Success", new Date()));
     }
 
-    @PreAuthorize("hasRole('HOTEL_ROLE')")
+    @PreAuthorize("hasRole('ROLE_HOTEL')")
     @PostMapping("/create_post/{userId}")
     public ResponseEntity<ApiResponse<HotelsPostDTO>> hotelPost(@Valid @PathVariable("userId") Integer userId,
                                                                 @RequestBody PostCreatedDTO postCreatedDTO) {
@@ -56,7 +56,7 @@ public class HotelsPostController {
     }
 
 
-    @PreAuthorize("hasRole('HOTEL_ROLE')")
+    @PreAuthorize("hasRole('ROLE_HOTEL')")
     @PutMapping("/update_post/{hotelsPostId}")
     public ResponseEntity<ApiResponse<HotelsPostDTO>> updateHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId,
                                                                        @Valid @RequestBody PostCreatedDTO postCreatedDTO) {
@@ -64,7 +64,7 @@ public class HotelsPostController {
                 , "Success", new Date()));
     }
 
-    @PreAuthorize("hasRole('HOTEL_ROLE')")
+    @PreAuthorize("hasRole('ROLE_HOTEL')")
     @DeleteMapping("/delete_post/{hotelsPostId}")
     public ResponseEntity<ApiResponse<String>> deleteHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.deleteHotelsPost(hotelsPostId),
