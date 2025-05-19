@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaxiCategoryDTO {
-    private String taxiCategoryDTOId;
+    private String taxiCategoryId;
     private String taxiCategoryName;
 }

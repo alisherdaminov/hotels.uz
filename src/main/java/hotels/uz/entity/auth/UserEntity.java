@@ -5,6 +5,7 @@ import hotels.uz.entity.hotels.post.HotelsEntity;
 import hotels.uz.entity.hotels.adverts.MainAddsEntity;
 import hotels.uz.entity.hotels.adverts.ShortAdvertsEntity;
 import hotels.uz.entity.hotels.likes.UserLikes;
+import hotels.uz.entity.hotels.taxi.TaxiEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,6 +71,9 @@ public class UserEntity {
     //comment
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityUserList;
+    //Taxi
+    @OneToMany(mappedBy = "userTaxi", fetch = FetchType.LAZY)
+    private List<TaxiEntity> taxiEntityList;
     //refresh
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private RefreshTokenEntity refreshToken;

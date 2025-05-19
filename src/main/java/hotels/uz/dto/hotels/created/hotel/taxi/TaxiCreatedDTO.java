@@ -19,6 +19,6 @@ public class TaxiCreatedDTO {
     @Length(min = 5, max = 15, message = "Taxi name must be min-5 to max-15 characters")
     private String taxiTitle;
     private String taxiLogo;
-    private Long taxiPhoneNumber;
+    private String taxiPhoneNumber;
     private List<TaxiCategoryCreatedDTO> categoryCreatedList = new ArrayList<>();
 }

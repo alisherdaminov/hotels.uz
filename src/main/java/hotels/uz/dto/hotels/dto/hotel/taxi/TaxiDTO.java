@@ -17,10 +17,11 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaxiDTO {
-    private String taxiDTOId;
+    private String taxiId;
     private String taxiTitle;
     private String taxiLogo;
-    private Long taxiPhoneNumber;
+    private String taxiPhoneNumber;
     private List<TaxiCategoryDTO> taxiCategoryList;
+    private LocalDateTime createdDate;
 
 }
