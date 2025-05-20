@@ -20,7 +20,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         // general info
         Info info = new Info()
-                .title("Hotel.uz")
+                .title("Hotels.uz")
                 .version("1.0.0")
                 .description("Hotel.uz is for all users and hotel owners to register and log in, daily usage, search hotels, order rooms, etc.")
                 .contact(new Contact()
@@ -29,7 +29,7 @@ public class SwaggerConfig {
                         .url("https://github.com/Alisher19121994/hotels.uz")
                 )
                 .license(new License()
-                        .name("hotel.uz")
+                        .name("hotels.uz")
 
                 );
 

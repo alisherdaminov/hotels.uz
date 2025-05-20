@@ -114,6 +114,7 @@ public class TaxiService {
                 categoryDTO.setTaxiCategoryName(taxi.getTaxiCategoryName());
                 taxiCategoryDTOList.add(categoryDTO);
             }
+
             dto.setTaxiCategoryList(taxiCategoryDTOList);
         }
         return dto;
