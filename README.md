@@ -94,8 +94,6 @@ We welcome contributions! You can help by:
 Improving API design
 Refactoring or optimizing logic
 Enhancing documentation
-Adding new features (e.g. loyalty system, live chat, map view)
-See CONTRIBUTING.md for how to get started.
 
 📬 Contact & Support
 📧 Email: alisherdaminov135@gmail
