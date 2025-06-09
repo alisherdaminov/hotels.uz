@@ -95,6 +95,8 @@ Improving API design
 Refactoring or optimizing logic
 Enhancing documentation
 
+Technologies: Java, OOP, Spring Framework, Spring security, Spring data JPA, Spring MVC, PostgreSQL, Lombok, Swagger, 
+
 📬 Contact & Support
 📧 Email: alisherdaminov135@gmail
 👥 Telegram: t.me/mr_daminov
