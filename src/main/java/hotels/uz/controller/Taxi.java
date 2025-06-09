@@ -6,6 +6,7 @@ import hotels.uz.dto.hotels.dto.hotel.taxi.TaxiDTO;
 import hotels.uz.dto.hotels.dto.hotel.taxi.TaxiImageDTO;
 import hotels.uz.service.hotels.taxi.TaxiImageService;
 import hotels.uz.service.hotels.taxi.TaxiService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/taxi")
-public class TaxiController {
+@Tag(name = "Taxi",description = "Taxi service is available here for all users and hotels owners")
+public class Taxi {
 
     @Autowired
     private TaxiService taxiService;
@@ -26,7 +28,7 @@ public class TaxiController {
     private TaxiImageService taxiImageService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/upload_taxi_image/{userId}")
+    @PostMapping("/upload-taxi-image/{userId}")
     public ResponseEntity<ApiResponse<TaxiImageDTO>> uploadTaxiImage(@RequestParam("file") MultipartFile file,
                                                                      @PathVariable("userId") Integer userId) {
         return ResponseEntity.ok().body(new ApiResponse<>(taxiImageService.uploadTaxiImage(file, userId),
@@ -47,7 +49,7 @@ public class TaxiController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/fetch_all")
+    @GetMapping("/fetch-all")
     public ResponseEntity<ApiResponse<List<TaxiDTO>>> getAllTaxiData() {
         return ResponseEntity.ok().body(new ApiResponse<>(taxiService.getAllTaxiData(),
                 "Success", new Date()));

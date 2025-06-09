@@ -1,6 +1,7 @@
 package hotels.uz.dto.Auth;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import hotels.uz.dto.Auth.profile.UserProfileImageDTO;
 import hotels.uz.enums.ProfileRole;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class ResponseDTO {
     private String propertyDescription;
     private String jwtToken;
     private String refreshToken;
+    private UserProfileImageDTO userProfileImage;
     private LocalDateTime createdDate;
 
 }

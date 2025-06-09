@@ -1,11 +1,12 @@
 package hotels.uz.dto.Auth;
 
+import hotels.uz.dto.Auth.profile.UserProfileImageCreatedDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CreatedUserDTO {
+public class UserCreatedDTO {
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -19,5 +20,6 @@ public class CreatedUserDTO {
     private Boolean hasParking;
     private String starRating;
     private String propertyDescription;
+    private UserProfileImageCreatedDTO userProfileImageCreatedDTO;
 }
 

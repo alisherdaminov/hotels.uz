@@ -14,17 +14,13 @@ import hotels.uz.entity.hotels.post.HotelsEntity;
 import hotels.uz.enums.ProfileRole;
 import hotels.uz.exceptions.AppBadException;
 import hotels.uz.repository.auth.UserRepository;
-import hotels.uz.repository.hotels.post.HotelDetailsRepository;
-import hotels.uz.repository.hotels.post.HotelsConditionRepository;
-import hotels.uz.repository.hotels.post.HotelsRepository;
-import hotels.uz.repository.hotels.post.PostImageRepository;
+import hotels.uz.repository.hotels.post.*;
 import hotels.uz.service.hotels.likes.UserLikesService;
 import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +42,7 @@ public class HotelsPostsService {
     private BookingService bookingService;
     @Autowired
     private PostImageRepository postImageRepository;
+
 
 
     //GET BY QUERY
@@ -117,7 +114,8 @@ public class HotelsPostsService {
             throw new AppBadException("You do not have permission to update this post");
         }
         String oldImage = null;
-        if (!postCreatedDTO.getRegionImage().getPostRegionImageCreatedId().equals(hotels.getHotelsRegionImageId())) {
+        if (!postCreatedDTO.getRegionImage().getPostRegionImageCreatedId()
+                .equals(hotels.getHotelsRegionImageId())) {
             oldImage = hotels.getHotelsRegionImageId();
         }
         hotels.setRegionName(postCreatedDTO.getRegionName());
@@ -214,25 +212,27 @@ public class HotelsPostsService {
         entity.setDiscountAddsDescription(dto.getDiscountAddsDescription());
         entity.setRoomsDeluxeName(dto.getRoomsDeluxeName());
 
+        // IMAGE
         if (dto.getPostHotelDetailsImageCreatedDTO() != null) {
             entity.setHotelsDetailsImageId(
-                    dto.getPostHotelDetailsImageCreatedDTO().getPostHotelDetailsImageCreatedId()
-            );
+                    dto.getPostHotelDetailsImageCreatedDTO().getPostHotelDetailsImageCreatedId());
         }
         entity.setHotelsEntity(hotels); // Parent link
-        hotelsDetailsRepository.save(entity);
+        HotelsDetailsEntity savedDetails = hotelsDetailsRepository.save(entity);
 
+        // CONDITIONS
         List<HotelsConditionEntity> conditionEntities = new ArrayList<>();
         for (HotelsCreatedConditionDTO conditionDTO : dto.getConditionNameOfItemDTOList()) {
             HotelsConditionEntity condition = new HotelsConditionEntity();
             condition.setConditionNameOfItem(conditionDTO.getConditionNameOfItem());
-            condition.setHotelsDetailsEntity(entity); // Link to parent HotelsDetailsEntity
+            condition.setHotelsDetailsEntity(savedDetails); // Link to parent HotelsDetailsEntity
             conditionEntities.add(condition);
             hotelsConditionRepository.save(condition);
         }
         entity.setHotelsConditionEntityList(conditionEntities);
         return entity;
     }
+
     public HotelsPostDTO mapToDTO(HotelsEntity region) {
         HotelsPostDTO dto = new HotelsPostDTO();
         dto.setPostId(region.getHotelsId());
@@ -284,46 +284,6 @@ public class HotelsPostsService {
         return dto;
     }
 }
-
-//toEntity
-//    public HotelsDetailsEntity toEntity(HotelDetailsCreatedDTO dto, HotelsEntity hotels) {
-//        HotelsDetailsEntity entity = new HotelsDetailsEntity();
-//        entity.setHotelName(dto.getHotelName());
-//        entity.setLocationShortDescription(dto.getLocationShortDescription());
-//        entity.setHotelShortDescription(dto.getHotelShortDescription());
-//        entity.setRoomShortDescription(dto.getRoomShortDescription());
-//        entity.setPriceShortDescription(dto.getPriceShortDescription());
-//        entity.setTotalPrice(dto.getTotalPrice());
-//        entity.setDiscountPrice(dto.getDiscountPrice());
-//        entity.setHotelsShortTitle(dto.getHotelsShortTitle());
-//        entity.setCancellationTitle(dto.getCancellationTitle());
-//        entity.setPaymentDescription(dto.getPaymentDescription());
-//        entity.setBreakfastIncludedDescription(dto.getBreakfastIncludedDescription());
-//        entity.setOrdered(dto.isOrdered());
-//        entity.setDiscountAddsTitle(dto.getDiscountAddsTitle());
-//        entity.setDiscountAddsDescription(dto.getDiscountAddsDescription());
-//        entity.setRoomsDeluxeName(dto.getRoomsDeluxeName());
-//        if (dto.getPostHotelDetailsImageCreatedDTO() != null) {
-//            entity.setHotelsDetailsImageId(dto.getPostHotelDetailsImageCreatedDTO().getPostHotelDetailsImageCreatedId());
-//        }
-//        entity.setHotelsEntity(hotels); // Link to parent entity
-//        hotelsDetailsRepository.save(entity);
-//        List<HotelsCreatedConditionDTO> conditionDTOList = dto.getConditionNameOfItemDTOList();
-//        List<HotelsConditionEntity> conditionEntities = new ArrayList<>();
-//
-//        if (conditionDTOList != null) {
-//            for (HotelsCreatedConditionDTO conditionDTO : dto.getConditionNameOfItemDTOList()) {
-//                HotelsConditionEntity condition = new HotelsConditionEntity();
-//                condition.setConditionNameOfItem(conditionDTO.getConditionNameOfItem());
-//                condition.setHotelsDetailsEntity(entity);
-//                conditionEntities.add(condition);
-//                hotelsConditionRepository.save(condition);
-//            }
-//        }
-//
-//        entity.setHotelsConditionEntityList(conditionEntities);
-//        return entity;
-//    }
 
 
 

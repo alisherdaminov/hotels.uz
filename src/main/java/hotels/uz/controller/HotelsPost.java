@@ -17,8 +17,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/hotel")
-@Tag(name = "Hotels Post Controller", description = "User can post")
-public class HotelsPostController {
+@Tag(name = "Hotels Post", description = "Hotel owner can create post that can be seen by all users")
+public class HotelsPost {
 
     @Autowired
     private HotelsPostsService hotelsPostService;
@@ -30,26 +30,26 @@ public class HotelsPostController {
     }
 
     @PreAuthorize("hasRole('ROLE_HOTEL')")
-    @PostMapping("/create_post/{userId}")
+    @PostMapping("/create-post/{userId}")
     public ResponseEntity<ApiResponse<HotelsPostDTO>> hotelPost(@Valid @PathVariable("userId") Integer userId,
                                                                 @RequestBody PostCreatedDTO postCreatedDTO) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.createPost(userId, postCreatedDTO)
                 , "Success", new Date()));
     }
 
-    @GetMapping("/fetch_posts")
+    @GetMapping("/fetch-posts")
     public ResponseEntity<ApiResponse<List<HotelsPostDTO>>> findAllHotelsPost() {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.findAllHotelsPost()
                 , "Success", new Date()));
     }
 
-    @GetMapping("/fetch_one_post/{hotelsPostId}")
+    @GetMapping("/fetch-one-post/{hotelsPostId}")
     public ResponseEntity<ApiResponse<HotelsPostDTO>> findByIdHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.getHotelsPostById(hotelsPostId)
                 , "Success", new Date()));
     }
 
-    @GetMapping("/fetch_one_details_post/{hotelDetailsPostId}")
+    @GetMapping("/fetch-one-details-post/{hotelDetailsPostId}")
     public ResponseEntity<ApiResponse<HotelsPostDTO>> getHotelsDetailsPostById(@PathVariable("hotelDetailsPostId") String hotelsPostId) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.getHotelsDetailsPostById(hotelsPostId)
                 , "Success", new Date()));
@@ -57,7 +57,7 @@ public class HotelsPostController {
 
 
     @PreAuthorize("hasRole('ROLE_HOTEL')")
-    @PutMapping("/update_post/{hotelsPostId}")
+    @PutMapping("/update-post/{hotelsPostId}")
     public ResponseEntity<ApiResponse<HotelsPostDTO>> updateHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId,
                                                                        @Valid @RequestBody PostCreatedDTO postCreatedDTO) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.updateHotelsPost(hotelsPostId, postCreatedDTO)
@@ -65,7 +65,7 @@ public class HotelsPostController {
     }
 
     @PreAuthorize("hasRole('ROLE_HOTEL')")
-    @DeleteMapping("/delete_post/{hotelsPostId}")
+    @DeleteMapping("/delete-post/{hotelsPostId}")
     public ResponseEntity<ApiResponse<String>> deleteHotelsPost(@PathVariable("hotelsPostId") String hotelsPostId) {
         return ResponseEntity.ok().body(new ApiResponse<>(hotelsPostService.deleteHotelsPost(hotelsPostId),
                 "Post successfully deleted", new Date()));

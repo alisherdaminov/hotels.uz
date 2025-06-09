@@ -22,5 +22,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     @Query("UPDATE UserEntity u SET u.createdDate = CURRENT_TIMESTAMP WHERE u.profileUserId = ?1")
     int updateLogoutTime(Integer profileUserId);
 
+    @Transactional
+    @Modifying
+    @Query("update UserEntity u set u.firstName = ?1, u.lastName = ?2, " +
+            "u.phoneNumber = ?3, u.email = ?4 where u.profileUserId = ?5")
+    void updateUserDetails(String firstName,
+                                 String lastName, String phoneNumber, String email,Integer userId);
+
 }
 

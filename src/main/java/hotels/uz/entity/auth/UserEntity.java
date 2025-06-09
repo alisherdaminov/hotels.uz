@@ -1,5 +1,6 @@
 package hotels.uz.entity.auth;
 
+import hotels.uz.entity.auth.profile.UserProfileImageEntity;
 import hotels.uz.entity.hotels.post.CommentEntity;
 import hotels.uz.entity.hotels.post.HotelsEntity;
 import hotels.uz.entity.hotels.adverts.MainAddsEntity;
@@ -55,6 +56,13 @@ public class UserEntity {
     //hotels
     @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
     private List<HotelsEntity> hotels;
+    //profile image
+    @Column(name = "profile_image_id")
+    private String profileImageId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_image_id", insertable = false, updatable = false)
+    private UserProfileImageEntity userProfileImage;
     //main adds
     @Column(name = "photo_id")
     private String photoId;

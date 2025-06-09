@@ -63,4 +63,5 @@ public class HotelsDetailsEntity {
     @JoinColumn(name = "post_images_details_id", insertable = false, updatable = false)
     private PostImageEntity postImage;
 
+
 }

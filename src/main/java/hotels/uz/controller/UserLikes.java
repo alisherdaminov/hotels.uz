@@ -13,8 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/like")
-@Tag(name = "User likes Controller", description = "User can like and unlike posts")
-public class UserLikesController {
+@Tag(name = "User likes ", description = "User can like and unlike posts of hotels")
+public class UserLikes {
 
     @Autowired
     private UserLikesService userLikesService;

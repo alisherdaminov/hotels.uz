@@ -4,6 +4,7 @@ import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.created.hotel.post.BookingCreatedDTO;
 import hotels.uz.dto.hotels.dto.hotel.post.BookingDTO;
 import hotels.uz.service.hotels.post.BookingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/booking")
-public class BookingController {
+@Tag(name = "Booking", description = "User can create booking and fetch order")
+public class Booking {
 
     @Autowired
     private BookingService bookingService;

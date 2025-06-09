@@ -1,13 +1,17 @@
 package hotels.uz.service.auth;
 
 import hotels.uz.dto.Auth.*;
+import hotels.uz.dto.Auth.UserCreatedDTO;
 import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.enums.AppLanguage;
 import hotels.uz.enums.ProfileRole;
+import hotels.uz.exceptions.AppBadException;
 import hotels.uz.repository.auth.RoleRepository;
 import hotels.uz.repository.auth.UserRepository;
 import hotels.uz.repository.auth.RefreshTokenRepository;
+import hotels.uz.service.auth.profile.UserProfileImageService;
 import hotels.uz.util.JwtUtil;
+import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,8 +36,10 @@ public class AuthService {
     private RefreshTokenService refreshTokenService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private UserProfileImageService userProfileImageService;
 
-    public ApiResponse<String> adminRegistration(CreatedUserDTO dto, AppLanguage language) {
+    public ApiResponse<String> adminRegistration(UserCreatedDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
             return new ApiResponse<>("Admin exists");
@@ -49,7 +55,7 @@ public class AuthService {
         return new ApiResponse<>("Admin successfully registered");
     }
 
-    public ApiResponse<String> userRegistration(CreatedUserDTO dto, AppLanguage language) {
+    public ApiResponse<String> userRegistration(UserCreatedDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
             return new ApiResponse<>("User exists");
@@ -67,7 +73,7 @@ public class AuthService {
         return new ApiResponse<>("User successfully registered");
     }
 
-    public ApiResponse<String> hotelRegistration(CreatedUserDTO dto, AppLanguage language) {
+    public ApiResponse<String> hotelRegistration(UserCreatedDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
             return new ApiResponse<>("Hotel exists");
@@ -111,6 +117,38 @@ public class AuthService {
         return updatedRows > 0;
     }
 
+    public ResponseDTO updateUserDetails(Integer userId, UserCreatedDTO createdDTO) {
+        UserEntity user = getUserById(userId);
+        if (!SpringSecurityUtil.hasRole(ProfileRole.ROLE_USER) &&
+                !user.getProfileUserId().equals(userId)) {
+            throw new AppBadException("You do not have any permission to update!");
+        }
+        Integer oldImage = null;
+        if (!createdDTO.getUserProfileImageCreatedDTO().getUserProfileImageCreatedId()
+                .equals(user.getProfileUserId())) {
+            oldImage = user.getProfileUserId();
+        }
+        user.setFirstName(createdDTO.getFirstName());
+        user.setLastName(createdDTO.getLastName());
+        user.setPhoneNumber(createdDTO.getPhoneNumber());
+        user.setEmail(createdDTO.getEmail());
+        user.setProfileUserId(createdDTO.getUserProfileImageCreatedDTO().getUserProfileImageCreatedId());
+
+        authRepository.save(user);
+        if (oldImage != null) {
+            userProfileImageService.deleteUserImage(String.valueOf(oldImage));
+        }
+        return buildUserDTO(user);
+    }
+
+    private UserEntity getUserById(Integer userId) {
+        Optional<UserEntity> optional = authRepository.findById(userId);
+        if (optional.isEmpty()) {
+            throw new AppBadException("User is not found!");
+        }
+        return optional.get();
+    }
+
 
     private ResponseDTO buildUserDTO(UserEntity user) {
         ResponseDTO dto = new ResponseDTO();
@@ -127,9 +165,10 @@ public class AuthService {
         dto.setPropertyDescription(user.getPropertyDescription());
         dto.setCreatedDate(user.getCreatedDate());
         List<ProfileRole> roles = roleRepository.findByRolesProfileUserId(user.getProfileUserId());
+        dto.setUserProfileImage(userProfileImageService.userImage(user.getProfileImageId()));
         dto.setRoles(roles);
         if (!roles.isEmpty()) {
-            dto.setJwtToken(JwtUtil.encode( user.getUsername(),user.getProfileUserId(), roles));
+            dto.setJwtToken(JwtUtil.encode(user.getUsername(), user.getProfileUserId(), roles));
             //dto.setRefreshToken(refreshTokenService.createRefreshToken(user).getRefreshToken());
         }
         return dto;

@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@Tag(name = "Auth User Controller", description = "Api's authorization and authentication for Users")
-public class AuthController {
+@Tag(name = "Auth", description = "Api's authorization and authentication for Users and Hotels owners")
+public class Auth {
     @Autowired
     private AuthService authService;
 
     @PostMapping("/admin/registration")
     public ResponseEntity<ApiResponse<String>> adminRegistration(@Valid
-                                                                 @RequestBody CreatedUserDTO createdUserDTO,
+                                                                 @RequestBody UserCreatedDTO createdUserDTO,
                                                                  @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.adminRegistration(createdUserDTO, language));
     }
@@ -28,14 +28,14 @@ public class AuthController {
 
     @PostMapping("/user/registration")
     public ResponseEntity<ApiResponse<String>> userRegistration(@Valid
-                                                                @RequestBody CreatedUserDTO createdUserDTO,
+                                                                @RequestBody UserCreatedDTO createdUserDTO,
                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.userRegistration(createdUserDTO, language));
     }
 
     @PostMapping("/hotel/registration")
     public ResponseEntity<ApiResponse<String>> hotelRegistration(@Valid
-                                                                 @RequestBody CreatedUserDTO createdUserDTO,
+                                                                 @RequestBody UserCreatedDTO createdUserDTO,
                                                                  @RequestHeader(value = "Accept-Language", defaultValue = "EN") AppLanguage language) {
         return ResponseEntity.ok().body(authService.hotelRegistration(createdUserDTO, language));
     }
@@ -47,10 +47,6 @@ public class AuthController {
         return ResponseEntity.ok().body(authService.login(loginDTO, language));
     }
 
-    //    @PostMapping("/refresh")
-//    public ApiResponse<AccessTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshToken) {
-//        return authService.refreshToken(refreshToken);
-//    }
     @PostMapping("/logout/{userId}")
     public ResponseEntity<ApiResponse<String>> logoutUser(@PathVariable("userId") Integer userId, HttpServletRequest request) {
         boolean success = authService.logoutByUserId(userId);

@@ -4,6 +4,7 @@ import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.created.hotel.post.CommentsCreatedDTO;
 import hotels.uz.dto.hotels.dto.hotel.post.CommentsDTO;
 import hotels.uz.service.hotels.post.CommentsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +15,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comment")
-public class CommentsController {
+@Tag(name = "Comments",description = "Once user checked in or registered, he can comment on the hotel")
+public class Comments {
 
     @Autowired
     private CommentsService commentsService;

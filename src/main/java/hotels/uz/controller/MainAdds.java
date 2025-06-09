@@ -3,6 +3,7 @@ package hotels.uz.controller;
 import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.dto.hotel.adverts.MainAddsDTO;
 import hotels.uz.service.hotels.adverts.MainAddsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/v1/main_adds")
-public class MainAddsController {
+@RequestMapping("/api/v1/main-adds")
+@Tag(name = "MainAdds", description = "MainAdds for Hotels to announce their services in the main page")
+public class MainAdds {
 
     @Autowired
     private MainAddsService mainAddsService;

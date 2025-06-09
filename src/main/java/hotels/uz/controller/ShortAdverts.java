@@ -4,6 +4,7 @@ import hotels.uz.dto.Auth.ApiResponse;
 import hotels.uz.dto.hotels.created.hotel.adverts.ShortAdvertsCreatedDTO;
 import hotels.uz.dto.hotels.dto.hotel.adverts.ShortAdvertsDTO;
 import hotels.uz.service.hotels.adverts.ShortAdvertsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/v1/short_adverts")
-public class ShortAdvertsController {
+@RequestMapping("/api/v1/short-adverts")
+@Tag(name = "ShortAdverts", description = "ShortAdverts can be created, updated and deleted by hotel owner or admin, it can be expired in 7 days")
+public class ShortAdverts {
 
     @Autowired
     private ShortAdvertsService shortAdvertsService;

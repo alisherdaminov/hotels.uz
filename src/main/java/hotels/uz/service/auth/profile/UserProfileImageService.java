@@ -1,9 +1,9 @@
-package hotels.uz.service.hotels.taxi;
+package hotels.uz.service.auth.profile;
 
-import hotels.uz.dto.hotels.dto.hotel.taxi.TaxiImageDTO;
-import hotels.uz.entity.hotels.taxi.TaxiImageEntity;
-import hotels.uz.enums.ProfileRole;
+import hotels.uz.dto.Auth.profile.UserProfileImageDTO;
+import hotels.uz.entity.auth.profile.UserProfileImageEntity;
 import hotels.uz.exceptions.AppBadException;
+import hotels.uz.repository.auth.UserProfileImageRepository;
 import hotels.uz.repository.hotels.taxi.TaxiImageRepository;
 import hotels.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class TaxiImageService {
+public class UserProfileImageService {
+
+    @Autowired
+    private UserProfileImageRepository repository;
 
     @Autowired
     private TaxiImageRepository taxiImageRepository;
@@ -35,9 +38,8 @@ public class TaxiImageService {
     @Value("${attach.upload.url}")
     private String url;
 
-    public TaxiImageDTO uploadTaxiImage(MultipartFile file, Integer userId) {
-        if (SpringSecurityUtil.hasRole(ProfileRole.ROLE_ADMIN) &&
-                userId.equals(SpringSecurityUtil.getCurrentUserId())) {
+    public UserProfileImageDTO uploadImage(MultipartFile file, Integer userId) {
+        if (userId.equals(SpringSecurityUtil.getCurrentUserId())) {
             if (file.isEmpty()) {
                 throw new AppBadException("Photo is not found!");
             }
@@ -49,29 +51,30 @@ public class TaxiImageService {
                 if (!folder.exists()) {
                     boolean result = folder.mkdirs();
                 }
-
                 Path path = Paths.get(folderName + "/" + pathFolder + "/" + keyUUID + "." + extension);
                 byte[] bytes = file.getBytes();
                 Files.write(path, bytes);
-                TaxiImageEntity entity = new TaxiImageEntity();
-                entity.setTaxiImageId(keyUUID);
+                UserProfileImageEntity entity = new UserProfileImageEntity();
+                entity.setUserProfileImageId(keyUUID);
                 entity.setPath(pathFolder);
                 entity.setExtension(extension);
                 entity.setOriginalName(file.getOriginalFilename());
                 entity.setSize(file.getSize());
-                taxiImageRepository.save(entity);
+                repository.save(entity);
                 return toDTO(entity);
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         }
         return null;
     }
 
-    public ResponseEntity<Resource> downloadTaxiImage(String taxiImageId) {
-        TaxiImageEntity entity = getById(taxiImageId);
+    public ResponseEntity<Resource> downloadImage(String userImageId) {
+        UserProfileImageEntity entity = getById(userImageId);
         Path filePath = Paths.get(folderName + "/" + entity.getPath() +
-                "/" + entity.getTaxiImageId() + "." + entity.getExtension()).normalize();
+                "/" + entity.getUserProfileImageId() + "." + entity.getExtension()).normalize();
         Resource resource;
         try {
             resource = new UrlResource(filePath.toUri());
@@ -90,63 +93,62 @@ public class TaxiImageService {
         }
     }
 
-    public String deleteTaxiImageById(String taxiImageId) {
-        String removeTaxiImageId = removeByExtension(taxiImageId);
-        Optional<TaxiImageEntity> optional = taxiImageRepository.findById(removeTaxiImageId);
+    public String deleteUserImage(String userImageId) {
+        String removedUserImageId = removeUserImage(userImageId);
+        Optional<UserProfileImageEntity> optional = repository.findById(removedUserImageId);
         if (optional.isEmpty()) {
             throw new AppBadException("Photo is not found!");
         }
-        TaxiImageEntity entity = optional.get();
-        String fullPath = folderName + "/" + entity.getPath() + "/" + entity.getTaxiImageId() + "." + entity.getExtension();
+        UserProfileImageEntity user = optional.get();
+        String fullPath = folderName + "/" + user.getPath() + "/" + user.getUserProfileImageId() + "." + user.getExtension();
         File file = new File(fullPath);
         if (file.exists()) {
             file.delete();
         }
-        taxiImageRepository.deleteById(removeTaxiImageId);
-        return "Deleted: " + taxiImageId;
+        repository.deleteById(removedUserImageId);
+        return "Deleted: " + removedUserImageId;
     }
 
-    public String removeByExtension(String fileName) {
-        int dotIndex = fileName.lastIndexOf(".");
-        return (dotIndex > 0) ? fileName.substring(0, dotIndex) : fileName;
+    public String removeUserImage(String filename) {
+        int dotIndex = filename.lastIndexOf(".");
+        return (dotIndex > 0) ? filename.substring(0, dotIndex) : filename;
     }
 
-    public TaxiImageEntity getById(String taxiImageId) {
-        Optional<TaxiImageEntity> optional = taxiImageRepository.findById(taxiImageId);
+    public UserProfileImageEntity getById(String userImageId) {
+        Optional<UserProfileImageEntity> optional = repository.findById(userImageId);
         if (optional.isEmpty()) {
             throw new AppBadException("Photo is not found!");
         }
         return optional.get();
     }
 
-    public TaxiImageDTO toDTO(TaxiImageEntity entity) {
-        TaxiImageDTO dto = new TaxiImageDTO();
-        dto.setTaxiImageId(entity.getTaxiImageId());
+    public UserProfileImageDTO toDTO(UserProfileImageEntity entity) {
+        UserProfileImageDTO dto = new UserProfileImageDTO();
+        dto.setUserProfileImageId(entity.getUserProfileImageId());
         dto.setOrigenName(entity.getOriginalName());
         dto.setExtension(entity.getExtension());
         dto.setSize(entity.getSize());
-        dto.setUrl(url + "/download/" + entity.getTaxiImageId() + "." + entity.getExtension());
+        dto.setUrl(url + "/download/" + entity.getUserProfileImageId() + "." + entity.getExtension());
         return dto;
     }
 
-    public TaxiImageDTO taxiImageDTO(String taxiImageId) {
-        if (taxiImageId == null) return null;
-        TaxiImageDTO dto = new TaxiImageDTO();
-        dto.setTaxiImageId(taxiImageId);
-        dto.setUrl(url + "/download/" + taxiImageId);
+    public UserProfileImageDTO userImage(String userImageId) {
+        if (userImageId == null) return null;
+        UserProfileImageDTO dto = new UserProfileImageDTO();
+        dto.setUserProfileImageId(userImageId);
+        dto.setUrl(url + "/download/" + userImageId);
         return dto;
     }
 
     public String getDateString() {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
-        int day = Calendar.getInstance().get(Calendar.DATE);
-        return year + "/" + month + "/" + day;
+        Calendar calendar = Calendar.getInstance();
+        return String.valueOf(calendar.get(Calendar.YEAR))
+                + calendar.get(Calendar.MONTH)
+                + calendar.get(Calendar.DAY_OF_MONTH);
     }
 
     public String getExtension(String fileName) {
         int lastIndex = fileName.lastIndexOf(".");
         return fileName.substring(lastIndex + 1);
     }
-
 }
