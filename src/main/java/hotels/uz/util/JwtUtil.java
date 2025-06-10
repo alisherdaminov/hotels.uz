@@ -5,6 +5,7 @@ import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.enums.ProfileRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,7 +48,6 @@ public class JwtUtil {
         List<ProfileRole> roleEnumList = Arrays.stream(strRole.split(",")).map(ProfileRole::valueOf).toList();
         return new JwtDTO(username, id, roleEnumList);
     }
-
 
     private static SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

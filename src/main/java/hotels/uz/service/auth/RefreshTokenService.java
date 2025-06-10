@@ -3,39 +3,44 @@ package hotels.uz.service.auth;
 import hotels.uz.entity.auth.RefreshTokenEntity;
 import hotels.uz.entity.auth.UserEntity;
 import hotels.uz.repository.auth.RefreshTokenRepository;
+import hotels.uz.repository.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
-
+    @Value("${jwt.refreshExpirationMs}")
+    private Long refreshTokenDurationMs;
     @Autowired
     private RefreshTokenRepository tokenRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public RefreshTokenEntity createRefreshToken(UserEntity user) {
-        tokenRepository.deleteByUser(user);
+    public RefreshTokenEntity createRefreshToken(Integer userId) {
         RefreshTokenEntity refreshToken = new RefreshTokenEntity();
-        refreshToken.setUser(user);
-        // 7 days
-        long refreshTokenDurationMs = 7 * 24 * 60 * 60 * 1000L;
+        refreshToken.setUser(userRepository.findById(userId).get());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+        refreshToken.setRefreshToken(UUID.randomUUID().toString());
         return tokenRepository.save(refreshToken);
     }
 
-    public Optional<RefreshTokenEntity> findByRefreshToken(String token) {
-        return tokenRepository.findByRefreshToken(token);
+    public Optional<RefreshTokenEntity> findByToken(String token) {
+        return tokenRepository.findByToken(token);
     }
 
-    public boolean verifyExpiration(RefreshTokenEntity token) {
+    public RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) {
         if (token.getExpiryDate().isBefore(Instant.now())) {
             tokenRepository.delete(token);
-            return false;
+            throw new RuntimeException("Refresh token expired");
         }
-        return true;
+        return token;
     }
+
 
     public void deleteByUser(UserEntity user) {
         tokenRepository.deleteByUser(user);

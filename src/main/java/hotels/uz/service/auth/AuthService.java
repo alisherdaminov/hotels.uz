@@ -39,6 +39,7 @@ public class AuthService {
     @Autowired
     private UserProfileImageService userProfileImageService;
 
+
     public ApiResponse<String> adminRegistration(UserCreatedDTO dto, AppLanguage language) {
         Optional<UserEntity> optional = authRepository.findByUsername(dto.getUsername());
         if (optional.isPresent()) {
@@ -150,7 +151,7 @@ public class AuthService {
     }
 
 
-    private ResponseDTO buildUserDTO(UserEntity user) {
+    private ResponseDTO buildUserDTO(UserEntity user ) {
         ResponseDTO dto = new ResponseDTO();
         dto.setUserId(user.getProfileUserId());
         dto.setFirstName(user.getFirstName());
@@ -169,7 +170,7 @@ public class AuthService {
         dto.setRoles(roles);
         if (!roles.isEmpty()) {
             dto.setJwtToken(JwtUtil.encode(user.getUsername(), user.getProfileUserId(), roles));
-            //dto.setRefreshToken(refreshTokenService.createRefreshToken(user).getRefreshToken());
+            dto.setRefreshToken(refreshTokenService.createRefreshToken(user.getProfileUserId()).getRefreshToken());
         }
         return dto;
     }

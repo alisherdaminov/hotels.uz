@@ -13,8 +13,7 @@ import java.util.Optional;
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, Integer> {
 
-    @EntityGraph(attributePaths = {"user"})
-    Optional<RefreshTokenEntity> findByRefreshToken(String refreshToken);
+    Optional<RefreshTokenEntity> findByToken(String refreshToken);
 
     @Transactional
     @Modifying
